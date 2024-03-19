@@ -1,0 +1,165 @@
+.register-container{
+    font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url(./Assets/landscape-sunset-minimal-4k-2y-1280x800.jpg)
+  no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.wrapper {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.success-message {
+    color: #28a745;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.login-link {
+    margin-top: 20px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-link div div {
+    cursor: pointer;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link div div:hover {
+    text-decoration: underline;
+}
+
+.errorMessage{
+    padding: 4px;
+    margin-left: 8px;
+}
+
+.messages {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    max-width: 400px;
+    width: 250px;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+  
+.error-message,
+.success-message {
+    padding: 10px 20px;
+    border-radius:10px;
+  }
+  
+.error-message {
+    background-color: #f44336;
+    color: white;
+    z-index: 99999;
+    
+}
+
+.error-message .icon {
+    display: grid;
+    place-items: center;
+    
+}
+  
+.success-message {
+    background-color: #4caf50;
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+  
+.messages-enter {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.messages-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.messages-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.messages-exit-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.loading-spinner {
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #115808;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-right: 12px; /* Khoảng cách giữa spinner và success message */
+    animation: spin 1s linear infinite;
+    margin-bottom: 2.47px;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
+

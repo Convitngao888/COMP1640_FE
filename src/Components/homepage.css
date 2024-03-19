@@ -1,0 +1,14 @@
+.home-container{
+    font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background: url(https://cdn.discordapp.com/attachments/781128129136820247/1219622506768498768/image0.jpg?ex=660bf8f9&is=65f983f9&hm=4599558901ef57c30206eafde33993dc58092d05318577ba06f882ccdb220435&);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.home-container h1{
+    color: aqua;
+}

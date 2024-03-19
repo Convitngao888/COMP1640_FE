@@ -1,3 +1,17 @@
+.login-container{
+    font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url(./Assets/landscape-sunset-minimal-4k-2y-1280x800.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 .wrapper {
     width: 420px;
     background: transparent;
@@ -7,6 +21,7 @@
     color: #fff;
     border-radius: 10px;
     padding: 30px 40px;
+    height: 100%;
 }
 .wrapper h1 {
     font-size: 36px;
@@ -58,12 +73,13 @@
     margin-right: 4px; 
 }
 
-.remember-forgot a {
+.remember-forgot div {
+    cursor: pointer;
     color: #fff;
     text-decoration: none;
 }
 
-.remember-forgot a:hover {
+.remember-forgot div:hover {
     text-decoration: underline;
 }
 
@@ -87,12 +103,36 @@
     margin: 20px 0 15px;
 }
 
-.register-link p a {
+.register-link div div {
+    cursor: pointer;
+    display: inline-block;
     color: #fff;
     text-decoration: none;
     font-weight: 600;
 }
 
-.register-link p a:hover {
+.register-link div div:hover {
     text-decoration: underline;
 }
+
+.login-error-message {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    width: 300px;
+    position: relative; /* Để có thể sử dụng position absolute cho icon */
+   
+   
+}
+
+.login-error-message .login-icon{
+    display: grid;
+    place-items: center;
+    right: 11px;
+    position: absolute;
+    top: 49%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
