@@ -48,7 +48,7 @@ const LoginForm = () => {
                 } else {
                     setErrorMessage('Login failed. Please try again.');
                 }
-                hideMessage();
+                // hideMessage();
                 return;
             }
 
@@ -59,8 +59,8 @@ const LoginForm = () => {
                 navigate('/homepage');
             }, 2000);
         } catch (error) {
-            setErrorMessage('An error occurred. Please try again.');
-            hideMessage();
+            setErrorMessage('UnKnown Error Occured');
+            // hideMessage();
         }
     };
 
@@ -108,8 +108,8 @@ const LoginForm = () => {
                         timeout={{ enter: 300, exit: 300 }}
                     >
                         <div className={`login-error-message`}>
+                            <div className="error-text">{errorMessage}</div>
                             <div className="login-icon"><FaExclamationCircle /></div>
-                            {errorMessage}
                         </div>
                     </CSSTransition>
                 )}
@@ -122,8 +122,8 @@ const LoginForm = () => {
                     >
                         <div className={`success-message`}>
                             <div className="loading-spinner"></div>
-                            {successMessage}
                         </div>
+                            {successMessage}
                     </CSSTransition>
                 )}
             </TransitionGroup>

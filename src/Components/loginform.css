@@ -117,22 +117,22 @@
 
 .login-error-message {
     background-color: #f44336;
+    display: flex;
+    align-items: center;
     color: white;
-    padding: 10px 20px;
+    
     border-radius: 10px;
-    width: 300px;
     position: relative; /* Để có thể sử dụng position absolute cho icon */
-   
-   
+}
+
+.error-text{
+    padding: 15px;
 }
 
 .login-error-message .login-icon{
-    display: grid;
-    place-items: center;
-    right: 11px;
-    position: absolute;
-    top: 49%;
-    transform: translateY(-50%);
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
 }
 

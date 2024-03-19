@@ -90,8 +90,8 @@
     position: fixed;
     top: 20px;
     left: 50%;
-    max-width: 400px;
-    width: 250px;
+    min-width: 250px;
+    width: max-content;
     transform: translateX(-50%);
     z-index: 9999;
 }

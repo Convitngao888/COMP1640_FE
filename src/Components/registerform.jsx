@@ -108,7 +108,7 @@ const RegisterForm = () => {
             }, 2000);
         } catch (error) {
             // Xử lý lỗi nếu có
-            setErrorMessage('An error occurred. Please try again.');
+            setErrorMessage('UnKnown Error Occurred');
             setSuccessMessage('');
             hideMessage();
         }
