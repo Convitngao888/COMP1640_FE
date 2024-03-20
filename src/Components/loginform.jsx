@@ -48,7 +48,7 @@ const LoginForm = () => {
                 } else {
                     setErrorMessage('Login failed. Please try again.');
                 }
-                // hideMessage();
+                hideMessage();
                 return;
             }
 
@@ -60,7 +60,7 @@ const LoginForm = () => {
             }, 2000);
         } catch (error) {
             setErrorMessage('UnKnown Error Occured');
-            // hideMessage();
+            hideMessage();
         }
     };
 
@@ -122,8 +122,8 @@ const LoginForm = () => {
                     >
                         <div className={`success-message`}>
                             <div className="loading-spinner"></div>
-                        </div>
                             {successMessage}
+                        </div>
                     </CSSTransition>
                 )}
             </TransitionGroup>
