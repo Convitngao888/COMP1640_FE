@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import './loginform.css';
 import { FaUser, FaEyeSlash, FaEye, FaExclamationCircle } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { useAuth } from './AuthContext';
 
 const LoginForm = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const { login } = useAuth();
 
     const handleRegisterClick = () => {
         navigate('/register');
@@ -26,7 +28,6 @@ const LoginForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const username = e.target.elements.username.value;
         const password = e.target.elements.password.value;
 
@@ -51,13 +52,17 @@ const LoginForm = () => {
                 hideMessage();
                 return;
             }
-
             setSuccessMessage('Login successful!');
             hideMessage();
+
+            const responseData = await response.json();
+            login(responseData.accessToken, responseData.roleId);
+            
             // Redirect to desired page after successful login
             setTimeout(() => {
                 navigate('/homepage');
             }, 2000);
+
         } catch (error) {
             setErrorMessage('UnKnown Error Occured');
             hideMessage();

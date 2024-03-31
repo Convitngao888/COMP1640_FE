@@ -22,7 +22,7 @@ const RegisterForm = () => {
     };
 
     const handleLoginClick = () => {
-        navigate('/login');
+        navigate('/');
     };
 
     const handleUsernameChange = (e) => {
@@ -94,7 +94,7 @@ const RegisterForm = () => {
                     setErrorMessage('Registration failed. Please try again.');
                     setSuccessMessage('');
                 }
-                // hideMessage() // Ẩn thông báo sau 2 giây
+                hideMessage() // Ẩn thông báo sau 2 giây
                 return;
             }
 
@@ -104,7 +104,7 @@ const RegisterForm = () => {
             setErrorMessage('');
             hideMessage();
             setTimeout(() => {
-                navigate('/login');
+                navigate('/');
             }, 2000);
         } catch (error) {
             // Xử lý lỗi nếu có

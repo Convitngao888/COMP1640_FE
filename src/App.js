@@ -2,21 +2,23 @@ import './App.css';
 import Loginform from './Components/loginform';
 import RegisterForm from './Components/registerform';
 import Homepage from './Components/homepage';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Adminpage from './Components/adminpage';
+import Studentpage from './Components/studentpage'
+import { BrowserRouter as Router, Route, Routes, } from 'react-router-dom';
 
 function App() {
+
   return (
     <Router>
-      <div>
-        <Routes> 
+      <Routes>
           <Route path="/" element={<Loginform />} />
-          <Route path="/login" element={<Loginform />} />
           <Route path="/register" element={<RegisterForm />} />
-          <Route path="/homepage" element={<Homepage />} />
-        </Routes>
-      </div>
+          <Route path="/homepage" element = {<Homepage />}/>
+          <Route path="/adminpage" element = {<Adminpage />}/>
+          <Route path="/studentpage" element = {<Studentpage />}/>
+      </Routes>
     </Router>
   );
 }
 
-export default App;
+export default App; 
