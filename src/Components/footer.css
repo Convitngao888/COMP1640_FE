@@ -1,0 +1,64 @@
+.footer {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgb(187, 160, 224);
+    color: #6a3474;
+    background-image: url(./Assets/landscape-sunset-minimal-4k-2y-1280x800.jpg)
+    
+  }
+
+  .footer {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .footer p {
+    margin: 0;
+  }
+  
+  .footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .footer li {
+    margin-left: 1rem;
+  }
+  
+  .footer a {
+    color: #6a3474;
+    text-decoration: none;
+  }
+
+  .footer-column {
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
+  
+  .footer a {
+    color: #6a3474;
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    color: #6a3474;
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .footer {
+      flex-direction: column;
+    }
+  
+    .footer-column {
+      flex: 1 0 auto;
+    }
+  }

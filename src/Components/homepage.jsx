@@ -1,4 +1,6 @@
 import './homepage.css'
+import Header from './header';
+import Footer from './footer';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
@@ -19,11 +21,14 @@ const Homepage = () => {
     
     return (
         accessToken ? (
+            
             <div className='home-container'>
+                <Header/>
                 <h1>Home Page</h1>
-                <button onClick={handleLogout}>Log out</button>
+                <button onClick={handleLogout}>Log out</button> 
                 <button onClick={handleAccessStudent}>student</button>
                 <button onClick={handleAccessAdmin}>admin</button>
+                <Footer/>
             </div>
         ) : (
             <Navigate to="/" />
