@@ -73,66 +73,66 @@ const Studentpage = () => {
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      minHeight: '100vh',
-      padding: '20px'
-    }}>
+    <div>
       {isAuthorized(1) ? (
         <>
-          <h1>SUBMIT FORM</h1>
-          <div style={{ width: '100%', maxWidth: '700px' }}>
-            <Input
-              placeholder="Title"
-              value={title}
-              onChange={handleTitleChange}
-              style={{ marginBottom: '15px', width: '100%' }}
-            />
-            <Input
-              placeholder="Faculty Name"
-              value={facultyName}
-              onChange={handleFacultyNameChange}
-              style={{ marginBottom: '15px', width: '100%' }}
-            />
-            <Upload
-              name="files"
-              customRequest={customRequest}
-              onChange={handleFileChange}
-              fileList={fileList}
-              multiple  
-              style={{ marginBottom: '15px', width: '100%' }}
-            >
-              <Button icon={<UploadOutlined />}>Upload Files</Button>
-            </Upload>
-            <Upload
-              name="images"
-              customRequest={customRequest}
-              onChange={handleImageChange}
-              fileList={imageList}
-              multiple
-              style={{ marginBottom: '15px', width: '100%' }}
-            >
-              <Button style={{ marginTop: '20px'}} icon={<UploadOutlined />}>Upload Images</Button>
-            </Upload>
-            <div style={{ textAlign: 'right' }}>
-              <Button type="primary" onClick={handleSubmit} loading={loading}>
-                Submit
-              </Button>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            
+            minHeight: '100vh',
+            padding: '20px'
+          }}>
+            <h1>SUBMIT FORM</h1>
+            <div style={{ width: '100%', maxWidth: '700px' }}>
+              <Input
+                placeholder="Title"
+                value={title}
+                onChange={handleTitleChange}
+                style={{ marginBottom: '15px', width: '100%' }}
+              />
+              <Input
+                placeholder="Faculty Name"
+                value={facultyName}
+                onChange={handleFacultyNameChange}
+                style={{ marginBottom: '15px', width: '100%' }}
+              />
+              <Upload
+                name="files"
+                customRequest={customRequest}
+                onChange={handleFileChange}
+                fileList={fileList}
+                multiple  
+                style={{ marginBottom: '15px', width: '100%' }}
+              >
+                <Button icon={<UploadOutlined />}>Upload Files</Button>
+              </Upload>
+              <Upload
+                name="images"
+                customRequest={customRequest}
+                onChange={handleImageChange}
+                fileList={imageList}
+                multiple
+                style={{ marginBottom: '15px', width: '100%' }}
+              >
+                <Button style={{ marginTop: '20px'}} icon={<UploadOutlined />}>Upload Images</Button>
+              </Upload>
+              <div style={{ textAlign: 'right' }}>
+                <Button type="primary" onClick={handleSubmit} loading={loading}>
+                  Submit
+                </Button>
+              </div>
             </div>
           </div>
         </>
       ) : (
-        <div style={{ textAlign: 'center' }}>
+        <div>
           <h1>YOU HAVE NO PERMISSION TO ACCESS THIS PAGE</h1>
           <GoBackButton />
         </div>
       )}
     </div>
-    
-
   );
 };
 

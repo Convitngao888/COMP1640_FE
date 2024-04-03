@@ -11,7 +11,7 @@ const Homepage = () => {
         navigate('/');
     }
     const handleAccessStudent = () => {
-        navigate('/studentpage');
+        navigate('/sidebar');
     }
     const handleAccessAdmin = () => {
         navigate('/adminpage');
