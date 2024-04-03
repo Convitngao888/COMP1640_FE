@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Studentpage from './studentpage';
+import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,17 +11,20 @@ import {
 import { Layout, Menu, Button, theme } from 'antd';
 
 const { Header, Sider, Content } = Layout;
+
 const SideBar = () => {
+  const navigate = useNavigate();
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
   const [collapsed, setCollapsed] = useState(false);
   const menuComponents = {
     '1': <Studentpage />,
-    
+
   };
   
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
   return (
     <Layout style={{minHeight: '100vh'}}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -37,12 +41,12 @@ const SideBar = () => {
               {
                 key: '1',
                 icon: <VideoCameraOutlined />,
-                label: 'nav 1',
+                label: 'Submit Page',
               },
               {
                 key: '2',
                 icon: <VideoCameraOutlined />,
-                label: 'nav 2',
+                label: 'My Article',
               },
               {
                 key: '3',
@@ -69,6 +73,11 @@ const SideBar = () => {
                 height: 64,
               }}
             />
+            <div style={{ float: 'right', marginRight: '32px' }}>
+              <Button onClick={() => navigate('/homepage')} type="primary">Back To Home Page</Button>
+            </div>
+            {/* Clear float để đảm bảo không ảnh hưởng từ float */}
+            <div style={{ clear: 'both' }}></div>
           </Header>
           <Content
             style={{

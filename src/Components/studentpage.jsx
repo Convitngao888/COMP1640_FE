@@ -54,7 +54,7 @@ const Studentpage = () => {
         setImageList([]);
         setFacultyName('');
       } else {
-        message.error('Failed to add article. Please try again.');
+        message.error('Invalid input, Please try again');
       }
     } catch (error) {
       console.error('Error adding article:', error);
@@ -67,7 +67,7 @@ const Studentpage = () => {
   const customRequest = async ({ file, onSuccess }) => {
     // Giả lập việc upload thành công với URL của file
     
-      const fileUrl = 'https://example.com/uploads/' + file.name;
+      const fileUrl = 'ALAMAK';
       onSuccess(fileUrl);
     
   };
@@ -104,6 +104,7 @@ const Studentpage = () => {
                 onChange={handleFileChange}
                 fileList={fileList}
                 multiple  
+                accept=".doc"
                 style={{ marginBottom: '15px', width: '100%' }}
               >
                 <Button icon={<UploadOutlined />}>Upload Files</Button>
@@ -113,6 +114,7 @@ const Studentpage = () => {
                 customRequest={customRequest}
                 onChange={handleImageChange}
                 fileList={imageList}
+                accept=".jpg,.png,.jpeg"
                 multiple
                 style={{ marginBottom: '15px', width: '100%' }}
               >
