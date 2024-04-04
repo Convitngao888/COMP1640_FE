@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Input, Button, message, Upload, } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useAuth } from './AuthContext';
-import GoBackButton from './goBackBtn';
+import { Navigate } from 'react-router-dom';
+
 const Studentpage = () => {
   const { isAuthorized } = useAuth();
 
@@ -130,8 +131,7 @@ const Studentpage = () => {
         </>
       ) : (
         <div>
-          <h1>YOU HAVE NO PERMISSION TO ACCESS THIS PAGE</h1>
-          <GoBackButton />
+          <Navigate to="/unAuthorized" />
         </div>
       )}
     </div>

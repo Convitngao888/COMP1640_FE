@@ -3,73 +3,81 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { Layout, Menu, theme } from 'antd';
 const { Header, Content, Footer } = Layout;
-const items = new Array(15).fill(null).map((_, index) => ({
-    key: index + 1,
-    label: `nav ${index + 1}`,
-  }));
 
 const Homepage = () => {
     const navigate = useNavigate();
     const { accessToken, logout } = useAuth();
     const {
         token: { colorBgContainer, borderRadiusLG },
-      } = theme.useToken();
+    } = theme.useToken();
     const handleLogout = () => {
         logout();
         navigate('/');
     }
     const handleAccessStudent = () => {
-        navigate('/sidebar');
+        navigate('/sidebarStudent');
     }
     const handleAccessAdmin = () => {
         navigate('/adminpage');
     }
-    
+
+
+
     return (
         accessToken ? (
-            
             <div className='home-container'>
-                <Layout>
+                <Layout style={{minHeight: '100vh'}}>
                     <Header
                         style={{
-                        display: 'flex',
-                        alignItems: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
                         }}
                     >
-                        <div className="demo-logo" />
+                         <div className="demo-logo">
+                            
+                        </div>
                         <Menu
-                        theme="dark"
-                        mode="horizontal"
-                        defaultSelectedKeys={['2']}
-                        items={items}
-                        style={{
-                            flex: 1,
-                            minWidth: 0,
-                        }}
-                        />
+                            theme="dark"
+                            mode="horizontal"
+                            defaultSelectedKeys={['2']}
+                            style={{
+                                flex: 1,
+                                minWidth: 0,
+                            }}
+                        >
+                            <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="student" onClick={handleAccessStudent}>
+                                STUDENT
+                            </Menu.Item>
+                            <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="admin" onClick={handleAccessAdmin}>
+                                MARKETING COORDINATOR
+                            </Menu.Item>
+                            <Menu.Item style={{marginLeft: 'auto', fontSize: 16, fontWeight: 'bold'}} key="logout" onClick={handleLogout}>
+                                LOGOUT
+                            </Menu.Item>    
+                        </Menu>
                     </Header>
+                    <br/>
+                    <br/>
                     <Content
                         style={{
-                        padding: '0 48px',
+                            padding: '0 48px',
+
                         }}
                     >
                         <div
-                        style={{
-                            background: colorBgContainer,
-                            minHeight: 280,
-                            padding: 24,
-                            borderRadius: borderRadiusLG,
-                        }}
+                            style={{
+                                background: colorBgContainer,
+                                minHeight: 280,
+                                padding: 24,
+                                borderRadius: borderRadiusLG,
+                            }}
                         >
-                        <button onClick={handleLogout}>Log out</button> 
-                        <button onClick={handleAccessStudent}>student</button>
-                        <button onClick={handleAccessAdmin}>admin</button>
                         </div>
                     </Content>
-                    
+
                     <Footer
                         style={{
-                        textAlign: 'center',
+                            textAlign: 'center',
                         }}
                     >
                         Alamak ©{new Date().getFullYear()} Created by Th0nk
