@@ -102,7 +102,7 @@ const Adminpage = () => {
         
         const dataToSend = {
           id: editFormData.id,
-          approval: editFormData.approval.toString(),
+          approval: editFormData.approval,
           comments: editFormData.comment,
         };
         console.log("Data to be sent: ", dataToSend);
