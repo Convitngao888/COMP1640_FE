@@ -18,7 +18,7 @@ const Homepage = () => {
         navigate('/sidebarStudent');
     }
     const handleAccessAdmin = () => {
-        navigate('/adminpage');
+        navigate('/SideBarMC');
     }
 
 

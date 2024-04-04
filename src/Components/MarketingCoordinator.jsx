@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Modal, Input, Select, Button } from 'antd';
 import axios from 'axios';
-
+import { useAuth } from './AuthContext';
+import { Navigate } from 'react-router-dom';
 const { Option } = Select;
 
 const Adminpage = () => {
+  const { isAuthorized } = useAuth();
   const [data, setData] = useState([]);
   const [editFormData, setEditFormData] = useState({
     id: null,
@@ -95,23 +97,21 @@ const Adminpage = () => {
         const config = {
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*', // Hoặc cấu hình chính xác cho origin của bạn
           },
         };
-        console.log('Data to be sent:', {
-            id: editFormData.id,
-            approval: editFormData.approval.toString(),
-            comments: editFormData.comment,
-          });
-      // Gọi API PUT và cập nhật dữ liệu
-      await axios.put(
-        `https://localhost:7021/api/Contributions/Review/${editFormData.id}`,
-        {
+        
+        const dataToSend = {
           id: editFormData.id,
           approval: editFormData.approval.toString(),
           comments: editFormData.comment,
-        },
-        config  // Truyền cấu hình vào yêu cầu
+        };
+        console.log("Data to be sent: ", dataToSend);
+          
+      // Gọi API PUT và cập nhật dữ liệu
+      await axios.put(
+        `https://localhost:7021/api/Contributions/Review/${dataToSend.id}`,
+        dataToSend,
+        config
       );
 
       // Sau khi gửi thành công, đóng modal
@@ -124,7 +124,7 @@ const Adminpage = () => {
             ...item,
             title: editFormData.title,
             approval: editFormData.approval,
-            comments: [editFormData.comment],
+            comments: editFormData.comment,
           };
         }
         return item;
@@ -163,35 +163,43 @@ const Adminpage = () => {
   }, []);
 
   return (
-    <>
-      <Table dataSource={data} columns={columns} />
-      <Modal
-        title="Edit Contribution"
-        visible={isModalVisible}
-        onOk={save}
-        onCancel={cancel}
-      >
-        <Input
-          value={editFormData.title}
-          onChange={(e) => handleInputChange('title', e.target.value)}
-          placeholder="Title"
-        />
-        <Select
-          
-          onChange={(value) => handleInputChange('approval', value === 'approve')}
-          style={{ width: '100%', marginTop: '10px' }}
-        >
-          <Option value="approve">Approve</Option>
-          <Option value="not-approve">Not Approve</Option>
-        </Select>
-        <Input
-          value={editFormData.comment}
-          onChange={(e) => handleInputChange('comment', e.target.value)}
-          placeholder="Comment"
-          style={{ marginTop: '10px' }}
-        />
-      </Modal>
-    </>
+    <div>
+      {isAuthorized(4) ? (
+        <>
+          <Table dataSource={data} columns={columns} />
+          <Modal
+            title="Edit Contribution"
+            visible={isModalVisible}
+            onOk={save}
+            onCancel={cancel}
+          >
+            <Input
+              value={editFormData.title}
+              onChange={(e) => handleInputChange('title', e.target.value)}
+              placeholder="Title"
+            />
+            <Select
+              
+              onChange={(value) => handleInputChange('approval', value === 'approve')}
+              style={{ width: '100%', marginTop: '10px' }}
+            >
+              <Option value="approve">Approve</Option>
+              <Option value="not-approve">Not Approve</Option>
+            </Select>
+            <Input
+              value={editFormData.comment}
+              onChange={(e) => handleInputChange('comment', e.target.value)}
+              placeholder="Comment"
+              style={{ marginTop: '10px' }}
+            />
+          </Modal>
+        </>
+      ) : (
+        <div>
+          <Navigate to="/unAuthorized" />
+        </div>
+      )}
+    </div>
   );
 };
 
