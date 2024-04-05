@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Modal, Input, Select, Button } from 'antd';
+import { Table, Modal, Input, Select, Button, message } from 'antd';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ const Adminpage = () => {
     comment: '',
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [defaultApproval, setDefaultApproval] = useState(true);
 
   const columns = [
     {
@@ -32,16 +33,7 @@ const Adminpage = () => {
       dataIndex: 'title',
       render: (text) => text !== null ? text : '',
     },
-    {
-      title: 'Submission Date',
-      dataIndex: 'submissionDate',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'Closure Date',
-      dataIndex: 'closureDate',
-      render: (text) => text !== null ? text : '',
-    },
+    
     {
       title: 'Status',
       dataIndex: 'status',
@@ -50,7 +42,10 @@ const Adminpage = () => {
     {
       title: 'Approval',
       dataIndex: 'approval',
-      render: (text) => text !== null ? (text ==='true'  ? 'Approve' : 'Not Approve') : '',
+      render: (text) => {
+        setDefaultApproval(text);
+        return text !== null ? (text  ? 'Approve' : 'Not Approve') : '';
+      },
     },
     {
       title: 'Faculty Name',
@@ -63,13 +58,18 @@ const Adminpage = () => {
       render: (text) => text !== null ? text : '',
     },
     {
-        title: 'Edit',
-        dataIndex: 'operation',
-        render: (_, record) => (
-            <Button onClick={() => edit(record.key)}>
+      title: 'Actions',
+      dataIndex: 'operation',
+      render: (_, record) => (
+        <>
+          <Button onClick={() => edit(record.key)}>
             Edit
-            </Button>
-        ),
+          </Button>
+          <Button style={{marginLeft: '8px'}} onClick={() => handleDownload(record.contributionId)}>
+            Download
+          </Button>
+        </>
+      ),
     },
   ];
 
@@ -79,12 +79,16 @@ const Adminpage = () => {
       console.error('Record not found');
       return;
     }
+  
+    // Set editFormData to the selected record's values
     setEditFormData({
       id: record.contributionId,
       title: record.title,
       approval: record.approval,
-      comment: record.comments && record.comments.length > 0 ? record.comments[0] : '',
+      comment: record.comments ,
     });
+    
+    // Show the modal
     setIsModalVisible(true);
   };
 
@@ -93,46 +97,41 @@ const Adminpage = () => {
   };
 
   const save = async () => {
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        
-        const dataToSend = {
-          id: editFormData.id,
-          approval: editFormData.approval,
-          comments: editFormData.comment,
-        };
-        console.log("Data to be sent: ", dataToSend);
-          
-      // Gọi API PUT và cập nhật dữ liệu
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+  
+      const dataToSend = {
+        id: editFormData.id,
+        approval: editFormData.approval,
+        comments: editFormData.comment,
+      };
+  
       await axios.put(
         `https://localhost:7021/api/Contributions/Review/${dataToSend.id}`,
         dataToSend,
         config
       );
-
-      // Sau khi gửi thành công, đóng modal
+  
       setIsModalVisible(false);
-
-      // Optional: Cập nhật dữ liệu trong state sau khi gọi API thành công
+  
       const updatedData = data.map((item) => {
-        if (item.key === editFormData.key) {
+        if (item.contributionId === editFormData.id) {
           return {
             ...item,
             title: editFormData.title,
             approval: editFormData.approval,
-            comments: editFormData.comment,
+            comments: editFormData.comment ,
           };
         }
         return item;
       });
       setData(updatedData);
-
-      // Hiển thị thông báo hoặc thực hiện các hành động khác sau khi gửi thành công
-      console.log('Update successful');
+  
+      message.success('Update successful');
     } catch (error) {
       console.error('Error saving data:', error);
     }
@@ -143,6 +142,23 @@ const Adminpage = () => {
       ...prevData,
       [field]: value,
     }));
+  };
+
+  const handleDownload = async (contributionId) => {
+    try {
+      const response = await axios.get(`https://localhost:7021/api/Contributions/Download/${contributionId}`, {
+        responseType: 'blob',
+      });
+      console.log(response.data);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${contributionId}.zip`);
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      message.error('Failed to download ZIP');
+    }
   };
 
   useEffect(() => {
@@ -173,13 +189,9 @@ const Adminpage = () => {
             onOk={save}
             onCancel={cancel}
           >
-            <Input
-              value={editFormData.title}
-              onChange={(e) => handleInputChange('title', e.target.value)}
-              placeholder="Title"
-            />
+      
             <Select
-              
+              defaultValue={defaultApproval ? "approve" : "not-approve"}
               onChange={(value) => handleInputChange('approval', value === 'approve')}
               style={{ width: '100%', marginTop: '10px' }}
             >
@@ -193,6 +205,7 @@ const Adminpage = () => {
               style={{ marginTop: '10px' }}
             />
           </Modal>
+        
         </>
       ) : (
         <div>

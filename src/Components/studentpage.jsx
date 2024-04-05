@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 
 const Studentpage = () => {
-  const { isAuthorized } = useAuth();
+  const { isAuthorized, userId } = useAuth();
 
   const [title, setTitle] = useState('');
   const [fileList, setFileList] = useState([]);
@@ -39,7 +39,7 @@ const Studentpage = () => {
       imageList.forEach((image) => {
         formData.append('images', image.originFileObj);
       });
-      formData.append('userId', 111); // Thay đổi thành ID người dùng thực tế
+      formData.append('userId', userId);
       formData.append('title', title);
       formData.append('facultyName', facultyName);
 
