@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 const { Option } = Select;
 
-const Adminpage = () => {
+const MCpage = () => {
   const { isAuthorized } = useAuth();
   const [data, setData] = useState([]);
   const [editFormData, setEditFormData] = useState({
@@ -216,4 +216,4 @@ const Adminpage = () => {
   );
 };
 
-export default Adminpage;
+export default MCpage;

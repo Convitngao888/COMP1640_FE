@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Adminpage from './MarketingCoordinator';
+import MCpage from './MarketingCoordinator';
 import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
@@ -17,7 +17,7 @@ const SideBarMC = () => {
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
   const [collapsed, setCollapsed] = useState(false);
   const menuComponents = {
-    '1': <Adminpage />,
+    '1': <MCpage />,
 
   };
   

@@ -72,6 +72,8 @@ const Homepage = () => {
                                 borderRadius: borderRadiusLG,
                             }}
                         >
+                             <h1>Ảnh từ API</h1>
+                            
                         </div>
                     </Content>
 
