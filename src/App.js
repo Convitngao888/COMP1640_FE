@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route, Routes, } from 'react-router-dom';
 import SideBar from './Components/sideBarStudent';
 import SideBarMC from './Components/sideBarMC';
 import UnAuthorized from './Components/unAuthorized';
-import ViewFileAndImage from './Components/viewFileAndImage';
+import SideBarMM from './Components/managerSidebar';
 function App() {
 
   return (
@@ -20,7 +20,7 @@ function App() {
           <Route path="/studentpage" element = {<Studentpage />}/>
           <Route path="/sidebarStudent" element = {<SideBar/>}/>
           <Route path="/unAuthorized" element = {<UnAuthorized/>}/>
-          <Route path="/viewfileandimage" element = {<ViewFileAndImage/>}/>
+          <Route path="/SideBarMM" element = {<SideBarMM/>}/>
       </Routes>
     </Router>
   );

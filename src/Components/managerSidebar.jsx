@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
-import Studentpage from './studentpage';
-import MySubmission from './mySubmission';
+import MMpage from './manager';
 import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
+  
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 
-const SideBar = () => {
+const SideBarMM = () => {
   const navigate = useNavigate();
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
   const [collapsed, setCollapsed] = useState(false);
   const menuComponents = {
-    '1': <Studentpage />,
-    '2': <MySubmission />,
+    '1' : <MMpage/>
 
   };
   
@@ -42,7 +41,7 @@ const SideBar = () => {
               {
                 key: '1',
                 icon: <VideoCameraOutlined />,
-                label: 'Submit Page',
+                label: 'MC Page',
               },
               {
                 key: '2',
@@ -95,4 +94,4 @@ const SideBar = () => {
       </Layout>
   );
 };
-export default SideBar;
+export default SideBarMM;

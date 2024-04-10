@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Modal, Input, Select, Button, message } from 'antd';
+import { Table, Modal, Select, Button, message, Input } from 'antd';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 const { Option } = Select;
 
 const MCpage = () => {
-  const { isAuthorized } = useAuth();
+  const { isAuthorized, userName } = useAuth();
   const [data, setData] = useState([]);
   const [editFormData, setEditFormData] = useState({
     id: null,
@@ -15,7 +15,9 @@ const MCpage = () => {
     comment: '',
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [defaultApproval, setDefaultApproval] = useState(true);
+  const [approvalValue, setApprovalValue] = useState('Select Approval');
+  const [newComment, setNewComment] = useState('');
+  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
 
   const columns = [
     {
@@ -43,7 +45,6 @@ const MCpage = () => {
       title: 'Approval',
       dataIndex: 'approval',
       render: (text) => {
-        setDefaultApproval(text);
         return text !== null ? (text  ? 'Approve' : 'Not Approve') : '';
       },
     },
@@ -54,8 +55,14 @@ const MCpage = () => {
     },
     {
       title: 'Comments',
-      dataIndex: 'comments',
-      render: (text) => text !== null ? text : '',
+      dataIndex: 'commentions',
+      render: (text) => (
+        <div>
+          {text !== null && text.map((comment, index) => (
+            <div key={index}>{comment}<br/></div>
+          ))}
+        </div>
+      ),
     },
     {
       title: 'Actions',
@@ -63,10 +70,22 @@ const MCpage = () => {
       render: (_, record) => (
         <>
           <Button onClick={() => edit(record.key)}>
-            Edit
+            Approve
           </Button>
           <Button style={{marginLeft: '8px'}} onClick={() => handleDownload(record.contributionId)}>
             Download
+          </Button>
+          <Button
+            style={{ marginLeft: '8px' }}
+            onClick={() => {
+              setEditFormData({
+                id: record.contributionId,
+                approval: record.approval,
+              });
+              setIsCommentModalVisible(true);
+            }}
+          >
+            Comment
           </Button>
         </>
       ),
@@ -80,15 +99,13 @@ const MCpage = () => {
       return;
     }
   
-    // Set editFormData to the selected record's values
     setEditFormData({
       id: record.contributionId,
-      title: record.title,
       approval: record.approval,
-      comment: record.comments ,
     });
-    
-    // Show the modal
+
+    setApprovalValue(record.approval ? 'approve' : 'not-approve');
+
     setIsModalVisible(true);
   };
 
@@ -105,13 +122,11 @@ const MCpage = () => {
       };
   
       const dataToSend = {
-        id: editFormData.id,
         approval: editFormData.approval,
-        comments: editFormData.comment,
       };
   
       await axios.put(
-        `https://localhost:7021/api/Contributions/Review/${dataToSend.id}`,
+        `https://localhost:7021/api/Contributions/Review/${editFormData.id}`,
         dataToSend,
         config
       );
@@ -122,9 +137,7 @@ const MCpage = () => {
         if (item.contributionId === editFormData.id) {
           return {
             ...item,
-            title: editFormData.title,
             approval: editFormData.approval,
-            comments: editFormData.comment ,
           };
         }
         return item;
@@ -146,10 +159,9 @@ const MCpage = () => {
 
   const handleDownload = async (contributionId) => {
     try {
-      const response = await axios.get(`https://localhost:7021/api/Contributions/Download/${contributionId}`, {
+      const response = await axios.get(`https://localhost:7021/api/Contributions/DownloadSelected/${contributionId}`, {
         responseType: 'blob',
       });
-      console.log(response.data);
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -161,6 +173,51 @@ const MCpage = () => {
     }
   };
 
+ const handleComment = async (contributionId) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const commentData = {
+      commentions: newComment,
+      userName: userName,
+    };
+
+    await axios.put(
+      `https://localhost:7021/api/Contributions/Comment/${contributionId}`,
+      commentData,
+      config
+    );
+
+    const newCommentions = `${userName} commented: ${newComment}`;
+
+    const updatedData = data.map((item) => {
+      if (item.contributionId === contributionId) {
+        let comments = item.commentions || []; // Xác định mảng comments, nếu item.commentions không tồn tại (null hoặc undefined), sử dụng mảng rỗng []
+        comments = [...comments, newCommentions]; // Thêm comment mới vào mảng comments
+        // Create a new object with the updated comments array
+        return {
+          ...item,
+          commentions: comments,
+        };
+      }
+      return item;
+    });
+
+    // Cập nhật lại state `data` sau khi cập nhật dữ liệu thành công
+    setData(updatedData);
+
+    message.success('Comment successful');
+  } catch (error) {
+    console.error('Error commenting:', error);
+    message.error('Failed to add comment');
+  }
+};
+  
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -178,34 +235,47 @@ const MCpage = () => {
     fetchData();
   }, []);
 
+  
+
   return (
     <div>
-      {isAuthorized(4) ? (
+      {isAuthorized(3) ? (
         <>
-          <Table dataSource={data} columns={columns} />
+          <Table dataSource={data} columns={columns} pagination={false}/>
           <Modal
-            title="Edit Contribution"
-            visible={isModalVisible}
+            title="Approval"
+            open={isModalVisible} 
             onOk={save}
             onCancel={cancel}
           >
-      
             <Select
-              defaultValue={defaultApproval ? "approve" : "not-approve"}
-              onChange={(value) => handleInputChange('approval', value === 'approve')}
+              value={approvalValue}
+              onChange={(value) => {
+                setApprovalValue(value);
+                handleInputChange('approval', value === 'approve');
+              }}
               style={{ width: '100%', marginTop: '10px' }}
             >
               <Option value="approve">Approve</Option>
               <Option value="not-approve">Not Approve</Option>
             </Select>
+          </Modal>
+
+          <Modal
+            title="Add Comment"
+            open={isCommentModalVisible}
+            onOk={() => {
+              handleComment(editFormData.id);
+              setIsCommentModalVisible(false);
+            }}
+            onCancel={() => setIsCommentModalVisible(false)}
+          >
             <Input
-              value={editFormData.comment}
-              onChange={(e) => handleInputChange('comment', e.target.value)}
-              placeholder="Comment"
-              style={{ marginTop: '10px' }}
+              placeholder="Enter your comment"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
             />
           </Modal>
-        
         </>
       ) : (
         <div>

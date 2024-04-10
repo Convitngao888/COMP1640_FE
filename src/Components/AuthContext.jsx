@@ -19,23 +19,31 @@ export const AuthProvider = ({ children }) => {
     const storedUserId = sessionStorage.getItem('userId');
     return storedUserId ? JSON.parse(storedUserId) : null;
   });
+  const [userName, setUserName] = useState(() => {
+    const storedUserName = sessionStorage.getItem('userName');
+    return storedUserName ? JSON.parse(storedUserName) : null;
+  });
 
   useEffect(() => {
     sessionStorage.setItem('accessToken', JSON.stringify(accessToken));
     sessionStorage.setItem('userRole', JSON.stringify(userRole));
     sessionStorage.setItem('userId', JSON.stringify(userId));
-  }, [accessToken, userRole, userId]);
+    sessionStorage.setItem('userName', JSON.stringify(userName));
+  }, [accessToken, userRole, userId, userName]);
 
-  const login = (token, role, id) => {
+  const login = (token, role, id, name) => {
     setAccessToken(token);
     setUserRole(role);
     setUserId(id);
+    setUserName(name);
   };
 
   const logout = () => {
     setAccessToken(null);
     setUserRole(null);
     setUserId(null);
+    setUserName(null);
+
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('userRole');
     sessionStorage.removeItem('userId');
@@ -46,7 +54,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, userRole, userId, login, logout, isAuthorized }}>
+    <AuthContext.Provider value={{ accessToken, userRole, userId, userName, login, logout, isAuthorized }}>
       {children}
     </AuthContext.Provider>
   );
