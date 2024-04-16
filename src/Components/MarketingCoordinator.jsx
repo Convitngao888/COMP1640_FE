@@ -35,7 +35,7 @@ const MCpage = () => {
       dataIndex: 'title',
       render: (text) => text !== null ? text : '',
     },
-    
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -45,7 +45,7 @@ const MCpage = () => {
       title: 'Approval',
       dataIndex: 'approval',
       render: (text) => {
-        return text !== null ? (text  ? 'Approve' : 'Not Approve') : '';
+        return text !== null ? (text ? 'Approve' : 'Not Approve') : '';
       },
     },
     {
@@ -59,7 +59,7 @@ const MCpage = () => {
       render: (text) => (
         <div>
           {text !== null && text.map((comment, index) => (
-            <div key={index}>{comment}<br/></div>
+            <div key={index}>{comment}<br /></div>
           ))}
         </div>
       ),
@@ -72,7 +72,7 @@ const MCpage = () => {
           <Button onClick={() => edit(record.key)}>
             Approve
           </Button>
-          <Button style={{marginLeft: '8px'}} onClick={() => handleDownload(record.contributionId)}>
+          <Button style={{ marginLeft: '8px' }} onClick={() => handleDownload(record.contributionId)}>
             Download
           </Button>
           <Button
@@ -98,7 +98,7 @@ const MCpage = () => {
       console.error('Record not found');
       return;
     }
-  
+
     setEditFormData({
       id: record.contributionId,
       approval: record.approval,
@@ -120,19 +120,19 @@ const MCpage = () => {
           'Content-Type': 'application/json',
         },
       };
-  
+
       const dataToSend = {
         approval: editFormData.approval,
       };
-  
+
       await axios.put(
         `https://localhost:7021/api/Contributions/Review/${editFormData.id}`,
         dataToSend,
         config
       );
-  
+
       setIsModalVisible(false);
-  
+
       const updatedData = data.map((item) => {
         if (item.contributionId === editFormData.id) {
           return {
@@ -143,7 +143,7 @@ const MCpage = () => {
         return item;
       });
       setData(updatedData);
-  
+
       message.success('Update successful');
     } catch (error) {
       console.error('Error saving data:', error);
@@ -173,51 +173,51 @@ const MCpage = () => {
     }
   };
 
- const handleComment = async (contributionId) => {
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+  const handleComment = async (contributionId) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
 
-    const commentData = {
-      commentions: newComment,
-      userName: userName,
-    };
+      const commentData = {
+        commentions: newComment,
+        userName: userName,
+      };
 
-    await axios.put(
-      `https://localhost:7021/api/Contributions/Comment/${contributionId}`,
-      commentData,
-      config
-    );
+      await axios.put(
+        `https://localhost:7021/api/Contributions/Comment/${contributionId}`,
+        commentData,
+        config
+      );
 
-    const newCommentions = `${userName} commented: ${newComment}`;
+      const newCommentions = `${userName} commented: ${newComment}`;
 
-    const updatedData = data.map((item) => {
-      if (item.contributionId === contributionId) {
-        let comments = item.commentions || []; // Xác định mảng comments, nếu item.commentions không tồn tại (null hoặc undefined), sử dụng mảng rỗng []
-        comments = [...comments, newCommentions]; // Thêm comment mới vào mảng comments
-        // Create a new object with the updated comments array
-        return {
-          ...item,
-          commentions: comments,
-        };
-      }
-      return item;
-    });
+      const updatedData = data.map((item) => {
+        if (item.contributionId === contributionId) {
+          let comments = item.commentions || []; // Xác định mảng comments, nếu item.commentions không tồn tại (null hoặc undefined), sử dụng mảng rỗng []
+          comments = [...comments, newCommentions]; // Thêm comment mới vào mảng comments
+          // Create a new object with the updated comments array
+          return {
+            ...item,
+            commentions: comments,
+          };
+        }
+        return item;
+      });
 
-    // Cập nhật lại state `data` sau khi cập nhật dữ liệu thành công
-    setData(updatedData);
+      // Cập nhật lại state `data` sau khi cập nhật dữ liệu thành công
+      setData(updatedData);
 
-    message.success('Comment successful');
-  } catch (error) {
-    console.error('Error commenting:', error);
-    message.error('Failed to add comment');
-  }
-};
-  
-  
+      message.success('Comment successful');
+    } catch (error) {
+      console.error('Error commenting:', error);
+      message.error('Failed to add comment');
+    }
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -235,16 +235,16 @@ const MCpage = () => {
     fetchData();
   }, []);
 
-  
+
 
   return (
     <div>
       {isAuthorized(3) ? (
         <>
-          <Table dataSource={data} columns={columns} pagination={false}/>
+          <Table dataSource={data} columns={columns} pagination={false} />
           <Modal
             title="Approval"
-            open={isModalVisible} 
+            open={isModalVisible}
             onOk={save}
             onCancel={cancel}
           >
