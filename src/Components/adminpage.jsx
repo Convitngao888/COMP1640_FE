@@ -183,7 +183,7 @@ const Adminpage = () => {
       {isAuthorized(4) ? (
         <>
           <Form form={form} name="time_related_controls" onFinish={onFinish}>
-            <DatePicker multiple onChange={onChange} size="large" />
+            <DatePicker placeholder='Select 3 Phases Of Academic Year' multiple onChange={onChange} size="large" />
             <Form.Item>
               <Button style={{ marginTop: 8 }} type="primary" htmlType="submit">
                 Create Academic Year
