@@ -5,7 +5,6 @@ import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
@@ -47,12 +46,7 @@ const SideBarAdmin = () => {
               {
                 key: '2',
                 icon: <VideoCameraOutlined />,
-                label: 'My Article',
-              },
-              {
-                key: '3',
-                icon: <UploadOutlined />,
-                label: 'nav 3',
+                label: 'Statistic',
               },
             ]}
           />

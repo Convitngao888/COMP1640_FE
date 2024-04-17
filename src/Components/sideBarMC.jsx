@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import MCpage from './MarketingCoordinator';
-
+import NotificationPage from './notifiPage';
 import { useNavigate, } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
@@ -23,7 +21,7 @@ const SideBarMC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const menuComponents = {
     '1': <MCpage />,
-    
+    '2':<NotificationPage/>
   };
   
   const {
@@ -51,12 +49,7 @@ const SideBarMC = () => {
               {
                 key: '2',
                 icon: <VideoCameraOutlined />,
-                label: 'My Article',
-              },
-              {
-                key: '3',
-                icon: <UploadOutlined />,
-                label: 'nav 3',
+                label: 'Notification',
               },
             ]}
           />

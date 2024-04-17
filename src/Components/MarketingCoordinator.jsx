@@ -10,7 +10,7 @@ const MCpage = () => {
   const { userName } = useAuth();
   const [newComment, setNewComment] = useState('');
   
-  const { isAuthorized } = useAuth();
+  const { isAuthorized, facultyName} = useAuth();
 
   const handleDownload = async (contributionId) => {
     try {
@@ -74,7 +74,7 @@ const MCpage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://localhost:7021/api/Contributions');
+        const response = await axios.get(`https://localhost:7021/api/Contributions/GetContributionsByFaculty?facultyName=${facultyName}`);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -82,7 +82,7 @@ const MCpage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [facultyName]);
 
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
