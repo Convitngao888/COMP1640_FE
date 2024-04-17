@@ -59,7 +59,7 @@ const MySubmission = () => {
 
   const handleDownload = async (contributionId) => {
     try {
-      const response = await axios.get(`https://localhost:7021/api/Contributions/DownloadSelected/${contributionId}`, {
+      const response = await axios.get(`https://localhost:7021/api/Contributions/Download/${contributionId}`, {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));

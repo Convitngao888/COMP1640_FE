@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Studentpage from './studentpage';
 import MySubmission from './mySubmission';
+import NotificationPage from './notifiPage';
 import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
@@ -18,7 +19,7 @@ const SideBar = () => {
   const menuComponents = {
     '1': <Studentpage />,
     '2': <MySubmission />,
-
+    '3': <NotificationPage/>
   };
   
   const {
@@ -47,6 +48,11 @@ const SideBar = () => {
                 key: '2',
                 icon: <VideoCameraOutlined />,
                 label: 'My Article',
+              },
+              {
+                key: '3',
+                icon: <VideoCameraOutlined />,
+                label: 'Notification',
               },
             ]}
           />

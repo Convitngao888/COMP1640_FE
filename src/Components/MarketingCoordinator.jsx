@@ -102,8 +102,9 @@ const MCpage = () => {
         config
       );
 
+      // Tìm contribution trong data và cập nhật trạng thái
       const updatedData = data.map((item) =>
-        item.contributionId === contributionId ? { ...item, approval: true } : item
+        item.contributionId === contributionId ? { ...item, approval: true, status: 'Approved' } : item
       );
 
       setData(updatedData);
@@ -114,21 +115,21 @@ const MCpage = () => {
     }
   };
 
-  const handleReject = async (contributionId) => {
+  const handleResit = async (contributionId) => {
     try {
-      await axios.delete(`https://localhost:7021/api/Contributions/${contributionId}`);
+      await axios.delete(`https://localhost:7021/api/Contributions/ResitArticles/${contributionId}`);
 
       const updatedData = data.filter((item) => item.contributionId !== contributionId);
 
       setData(updatedData);
-      message.success('Rejected successfully');
+      message.success('Resit successfully');
     } catch (error) {
       console.error('Error rejecting:', error);
-      message.error('Failed to reject');
+      message.error('Failed to resit');
     }
   };
 
-  const handleReset = async (contributionId) => {
+  const handleReject = async (contributionId) => {
     try {
       const config = {
         headers: {
@@ -143,14 +144,14 @@ const MCpage = () => {
       );
 
       const updatedData = data.map((item) =>
-        item.contributionId === contributionId ? { ...item, approval: false } : item
+        item.contributionId === contributionId ? { ...item, approval: false, status: 'Rejected' } : item
       );
 
       setData(updatedData);
-      message.success('Delete successfully');
+      message.success('Reject successfully');
     } catch (error) {
       console.error('Error resetting:', error);
-      message.error('Failed to reset');
+      message.error('Failed to reject');
     }
   };
 
@@ -189,13 +190,13 @@ const MCpage = () => {
                       <tr className='tr'>
                         <th className='th'>Approval</th>
                         <td className='td'>
-                          {contribution?.approval ? (
+                          {contribution?.status !== 'Pending' ? (
                             <>
-                              <Button danger onClick={() => handleReset(contribution.contributionId)}>Resit</Button>
+                              <Button danger onClick={() => handleResit(contribution.contributionId)}>Resit</Button>
                             </>
                           ) : (
                             <>
-                              <Button type="primary" danger style={{background:'#66FF00', marginRight:'8px'}}  onClick={() => handleApprove(contribution.contributionId)}>Approve</Button>
+                              <Button type="primary" danger style={{background:'#66FF00', marginRight:'8px'}}  onClick={() => handleApprove(contribution.contributionId)}>Accept</Button>
                               <Button type="primary" danger onClick={() => handleReject(contribution.contributionId)}>Reject</Button>
                             </>
                           )}
