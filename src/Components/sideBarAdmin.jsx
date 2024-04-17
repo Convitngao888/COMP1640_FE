@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
-import MCpage from './MarketingCoordinator';
-
+import Adminpage from './adminpage';
+import Chartpage from './chartpage';
 import { useNavigate, } from 'react-router-dom';
-import { useAuth } from './AuthContext';
-
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
-  
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 
-const SideBarMC = () => {
-  const {userName } = useAuth();
-
+const SideBarAdmin = () => {
   const navigate = useNavigate();
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
   const [collapsed, setCollapsed] = useState(false);
   const menuComponents = {
-    '1': <MCpage />,
-    
+    '1': <Adminpage />,
+    '2': <Chartpage/>
+
   };
   
   const {
@@ -46,7 +42,7 @@ const SideBarMC = () => {
               {
                 key: '1',
                 icon: <VideoCameraOutlined />,
-                label: 'MC Page',
+                label: 'Submit Page',
               },
               {
                 key: '2',
@@ -84,7 +80,6 @@ const SideBarMC = () => {
             {/* Clear float để đảm bảo không ảnh hưởng từ float */}
             <div style={{ clear: 'both' }}></div>
           </Header>
-          <h2 style={{marginLeft: 24}}>Welcome Back {userName}</h2>
           <Content
             style={{
               margin: '24px 16px',
@@ -100,4 +95,4 @@ const SideBarMC = () => {
       </Layout>
   );
 };
-export default SideBarMC;
+export default SideBarAdmin;

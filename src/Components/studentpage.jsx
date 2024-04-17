@@ -1,26 +1,20 @@
 import React, { useState } from 'react';
-import { Input, Button, message, Upload, Select } from 'antd';
+import { Input, Button, message, Upload,  } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 
-const { Option } = Select;
 
 const Studentpage = () => {
-  const { isAuthorized, userId } = useAuth();
+  const { isAuthorized, userId, facultyName } = useAuth();
 
   const [title, setTitle] = useState('');
   const [fileList, setFileList] = useState([]);
   const [imageList, setImageList] = useState([]);
-  const [facultyName, setFacultyName] = useState();
   const [loading, setLoading] = useState(false);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
-  };
-
-  const handleFacultyNameChange = (value) => {
-    setFacultyName(value);
   };
 
   const handleFileChange = (info) => {
@@ -33,6 +27,7 @@ const Studentpage = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    const academicYearsId = 9
     try {
       const formData = new FormData();
       fileList.forEach((file) => {
@@ -44,6 +39,7 @@ const Studentpage = () => {
       formData.append('userId', userId);
       formData.append('title', title);
       formData.append('facultyName', facultyName);
+      formData.append('academicYearsId', academicYearsId);
 
       const response = await fetch('https://localhost:7021/api/Contributions/AddArticles', {
         method: 'POST',
@@ -55,7 +51,6 @@ const Studentpage = () => {
         setTitle('');
         setFileList([]);
         setImageList([]);
-        setFacultyName('');
       } else {
         message.error('Invalid input, Please try again');
       }
@@ -95,16 +90,6 @@ const Studentpage = () => {
                 onChange={handleTitleChange}
                 style={{ marginBottom: '15px', width: '100%' }}
               />
-              <Select
-                placeholder="Select Faculty"
-                value={facultyName}
-                onChange={handleFacultyNameChange}
-                style={{ marginBottom: '15px', width: '100%' }}
-              >
-                <Option value="Computer Science">Computer Science</Option>
-                <Option value="Business Administration">Business Administration</Option>
-                <Option value="Graphic Design">Graphic Design</Option>
-              </Select>
               <Upload
                 name="files"
                 customRequest={customRequest}

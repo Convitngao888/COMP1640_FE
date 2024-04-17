@@ -4,15 +4,18 @@ import { useAuth } from './AuthContext';
 import { Layout, Menu, theme, Card, message } from 'antd';
 import React, { useState, useEffect,  } from 'react';
 import axios from 'axios';
-import { DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined,  } from '@ant-design/icons';
 
 const { Meta } = Card;
 const { Header, Content, Footer } = Layout;
+
+
 
 const Homepage = () => {
     const [contributions, setContributions] = useState([]);
     const navigate = useNavigate();
     const { accessToken, logout } = useAuth();
+    
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -29,6 +32,9 @@ const Homepage = () => {
     }
     const handleAccessManager = () => {
         navigate('/SideBarMM');
+    }
+    const handleAccessAdmin = () => {
+        navigate('/SideBarAdmin');
     }
 
     const handleDownload = async (contributionId) => {
@@ -62,6 +68,7 @@ const Homepage = () => {
         fetchData();
       }, []);
     
+   
       
     return (
         accessToken ? (
@@ -94,6 +101,9 @@ const Homepage = () => {
                             <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="admin" onClick={handleAccessManager}>
                                 MARKETING MANAGER
                             </Menu.Item>
+                            <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="admin" onClick={handleAccessAdmin}>
+                                ADMIN
+                            </Menu.Item>
                             <Menu.Item style={{marginLeft: 'auto', fontSize: 16, fontWeight: 'bold'}} key="logout" onClick={handleLogout}>
                                 LOGOUT
                             </Menu.Item>    
@@ -118,27 +128,30 @@ const Homepage = () => {
                              {/* nội dung API */}
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 {contributions.map((contribution, index) => (
-                                    <Card
-                                        key={index}
-                                        style={{ width: 300, margin: 10 }}
-                                        cover={
+                                        <Card
+                                            key={index}
+                                            style={{ width: 300, margin: 10 }}
+                                            cover={
                                             <img
-                                                alt={`cdsfdsf`}
+                                                alt={contribution.title}
                                                 src={'https://th.bing.com/th/id/OIP.1EjjKwF1EODXnXekeJD8iwHaCq?w=325&h=125&c=7&r=0&o=5&pid=1.7'}
                                             />
-                                        }
-                                        actions={[
-                                            <DownloadOutlined  style={{fontSize: 15,}}
+                                            }
+                                            actions={[
+                                            <DownloadOutlined
+                                                style={{ fontSize: 15 }}
                                                 onClick={() => handleDownload(contribution.contributionId)}
-                                            />
-                                        ]}
-                                    >
-                                        <Meta
+                                            />,
+                                          
+                                            ]}
+                                        >
+                                            <Meta
                                             title={contribution.title}
                                             description={`Faculty: ${contribution.facultyName}`}
-                                        />
-                                    </Card>
+                                            />
+                                        </Card>
                                 ))}
+                               
                             </div>
 
                         </div>

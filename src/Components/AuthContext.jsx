@@ -23,19 +23,25 @@ export const AuthProvider = ({ children }) => {
     const storedUserName = sessionStorage.getItem('userName');
     return storedUserName ? JSON.parse(storedUserName) : null;
   });
+  const [facultyName, setFacultyName] = useState(() => {
+    const storedFacultyName = sessionStorage.getItem('facultyName');
+    return storedFacultyName ? JSON.parse(storedFacultyName) : null;
+  });
 
   useEffect(() => {
     sessionStorage.setItem('accessToken', JSON.stringify(accessToken));
     sessionStorage.setItem('userRole', JSON.stringify(userRole));
     sessionStorage.setItem('userId', JSON.stringify(userId));
     sessionStorage.setItem('userName', JSON.stringify(userName));
-  }, [accessToken, userRole, userId, userName]);
+    sessionStorage.setItem('facultyName', JSON.stringify(facultyName));
+  }, [accessToken, userRole, userId, userName, facultyName]);
 
-  const login = (token, role, id, name) => {
+  const login = (token, role, id, name, faculty) => {
     setAccessToken(token);
     setUserRole(role);
     setUserId(id);
     setUserName(name);
+    setFacultyName(faculty);
   };
 
   const logout = () => {
@@ -43,10 +49,7 @@ export const AuthProvider = ({ children }) => {
     setUserRole(null);
     setUserId(null);
     setUserName(null);
-
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('userRole');
-    sessionStorage.removeItem('userId');
+    setFacultyName(null)
   };
 
   const isAuthorized = (requiredRole) => {
@@ -54,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, userRole, userId, userName, login, logout, isAuthorized }}>
+    <AuthContext.Provider value={{ accessToken, userRole, userId, userName, facultyName, login, logout, isAuthorized }}>
       {children}
     </AuthContext.Provider>
   );

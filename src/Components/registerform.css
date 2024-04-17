@@ -153,7 +153,32 @@
     margin-right: 12px; /* Khoảng cách giữa spinner và success message */
     animation: spin 1s linear infinite;
     margin-bottom: 2.47px;
+}
+
+.select-wrapper {
+    position: relative;
   }
+  
+  .select {
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: transparent;
+    color: #fff;
+    position: relative;
+    
+  }
+  
+  .select option {
+    background: pink; /* Màu nền cho option */
+    padding: 10px;
+  }
+  
+  
   
   @keyframes spin {
     to {

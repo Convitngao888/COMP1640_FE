@@ -1,170 +1,60 @@
-import { Table, Modal, Button, message, Input, Upload, } from 'antd';
+import { message, Card, } from 'antd';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
-import { UploadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, EditOutlined, UnorderedListOutlined   } from '@ant-design/icons';
+import ContributionModal from './ContributionModal';
+import EditModal from './Editmodal';
+const { Meta } = Card;
 
 const MySubmission = () => {
   
   const {  userName, userId } = useAuth();
-  const [data, setData] = useState([]);
-  const [editFormData, setEditFormData] = useState({
-    id: null,
-    title: '',
-    approval: true,
-    comment: '',
-  });
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [newComment, setNewComment] = useState('');
-  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
-  const [imageList, setImageList] = useState([]);
-  const [fileList, setFileList] = useState([]);
-
-
-  const columns = [
-    {
-      title: 'Contribution ID',
-      dataIndex: 'contributionId',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'User ID',
-      dataIndex: 'userId',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      render: (text) => text !== null ? text : '',
-    },
-    
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'Approval',
-      dataIndex: 'approval',
-      render: (text) => {
-        return text !== null ? (text  ? 'Approve' : 'Not Approve') : '';
-      },
-    },
-    {
-      title: 'Faculty Name',
-      dataIndex: 'facultyName',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'Comments',
-      dataIndex: 'commentions',
-      render: (text) => (
-        <div>
-          {text !== null && text.map((comment, index) => (
-            <div key={index}>{comment}<br/></div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      title: 'Actions',
-      dataIndex: 'operation',
-      render: (_, record) => (
-        <>
-          <Button onClick={() => edit(record.key)}>
-            Edit
-          </Button>
-          <Button style={{marginLeft: '8px'}} onClick={() => handleDownload(record.contributionId)}>
-            Download
-          </Button>
-          <Button
-            style={{ marginLeft: '8px' }}
-            onClick={() => {
-              setEditFormData({
-                id: record.contributionId,
-                approval: record.approval,
-              });
-              setIsCommentModalVisible(true);
-            }}
-          >
-            Comment
-          </Button>
-        </>
-      ),
-    },
-  ];
-
-  const edit = (key) => {
-    const record = data.find((item) => item.key === key);
-    if (!record) {
-      console.error('Record not found');
-      return;
-    }
-  
-    setEditFormData({
-      id: record.contributionId,
-      title: record.title,
-      files: [],
-      image: [],
-    });
-  
-    setIsModalVisible(true);
-  };
-
-  const cancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const save = async () => {
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [selectedContribution, setSelectedContribution] = useState(null);
+  const [selectedEditContribution, setSelectedEditContribution] = useState(null);
+  const [contributions, setContributions] = useState([]);
+   
+  const handleEdit = async ({ title, files, images }) => {
     try {
       const formData = new FormData();
-      formData.append('title', editFormData.title);
-      formData.append('userId', userId);
-      fileList.forEach((file) => {
-        formData.append('files', file.originFileObj);
+      formData.append('title', title);
+      files.forEach((file) => {
+        formData.append('files', file);
       });
-      imageList.forEach((image) => {
-        formData.append('images', image.originFileObj);
+      images.forEach((image) => {
+        formData.append('images', image);
       });
-  
-      await axios.put(
-        `https://localhost:7021/api/Contributions/Edit/${editFormData.id}`,
-        formData,
+
+      const response = await axios.put(
+        `https://localhost:7021/api/Contributions/Edit/${selectedEditContribution.contributionId}`,
+        formData
       );
-  
-      setIsModalVisible(false);
-  
-      const updatedData = data.map((item) => {
-        if (item.contributionId === editFormData.id) {
-          return {
-            ...item,
-            title: editFormData.title,
-          };
-        }
-        return item;
-      });
-      setData(updatedData);
-  
+
+      // Sau khi gọi API thành công, cập nhật UI
+      const updatedData = {
+        contributionId: selectedEditContribution.contributionId,
+        facultyName: selectedEditContribution.facultyName,
+        title: response.data.title,
+        filePaths: response.data.filePaths,
+        imagePaths: response.data.imagePaths,
+      };
+
+      setSelectedEditContribution(updatedData);
+
+      const updatedContributions = contributions.map((contribution) =>
+        contribution.contributionId === selectedEditContribution.contributionId
+          ? updatedData
+          : contribution
+      );
+
+      setContributions(updatedContributions);
+
       message.success('Update successful');
     } catch (error) {
-      message.error('invalid input');
+      message.error('Invalid input');
     }
-  };
-  
-  const handleFileChange = (info) => {
-    setFileList(info.fileList);
-  };
-
-  const handleImageChange = (info) => {
-    setImageList(info.fileList);
-  };
-  
-  const customRequest = async ({ onSuccess }) => {
-    // Giả lập việc upload thành công với URL của file
-    
-      const fileUrl = 'ALAMAK';
-      onSuccess(fileUrl);
-    
   };
 
   const handleDownload = async (contributionId) => {
@@ -183,7 +73,7 @@ const MySubmission = () => {
     }
   };
 
-  const handleComment = async (contributionId) => {
+  const handleSaveComment = async (comment) => {
     try {
       const config = {
         headers: {
@@ -192,121 +82,120 @@ const MySubmission = () => {
       };
   
       const commentData = {
-        commentions: newComment,
+        commentions: comment,
         userName: userName,
       };
   
       await axios.put(
-        `https://localhost:7021/api/Contributions/Comment/${contributionId}`,
+        `https://localhost:7021/api/Contributions/Comment/${selectedContribution.contributionId}`,
         commentData,
         config
       );
   
-      // Kiểm tra dữ liệu trả về từ API
-      
-        const newCommentions = `${userName} commented: ${newComment}`;
+      // Update comments locally
+      const updatedContribution = {
+        ...selectedContribution,
+        commentions: [...selectedContribution.commentions, `${userName} commented: ${comment}`],
+      };
   
-        const updatedData = data.map((item) => {
-          if (item.contributionId === contributionId) {
-            // Thêm comment mới vào danh sách comment cũ
-            const updatedItem = {
-              
-              commentions: [...item.commentions, newCommentions],
-            };
-            return updatedItem;
-          }
-          return item;
-        });
+      setSelectedContribution(updatedContribution);
   
-        // Cập nhật lại state `data` sau khi cập nhật dữ liệu thành công
-        setData(updatedData);
+      // Update contributions list with the updated contribution
+      const updatedContributions = contributions.map((contribution) =>
+        contribution.contributionId === selectedContribution.contributionId
+          ? updatedContribution
+          : contribution
+      );
   
-        message.success('Comment successful');
+      setContributions(updatedContributions);
+  
+  
+      message.success('Comment added successfully');
     } catch (error) {
-      console.error('Error commenting:', error);
+      console.error('Error adding comment:', error);
       message.error('Failed to add comment');
     }
   };
   
   
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`https://localhost:7021/api/Contributions/${userId}`);
-        const data = response.data.map((item, index) => ({
-          ...item,
-          key: index.toString(),
-        }));
-        setData(data);
+        const myContributions = response.data;
+        setContributions(myContributions);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching contributions:', error);
       }
     };
 
     fetchData();
-  },[userId]);
+  }, [userId]);
+
+  const showModal = (contribution) => {
+      setSelectedContribution(contribution);
+      setIsModalVisible(true);
+    };
+    
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setIsEditModalVisible(false)
+
+  };
+  const showEditModal = (contribution) => {
+    setSelectedEditContribution(contribution);
+    setIsEditModalVisible(true)
+  }
 
   return (
-    <div>
-      <Table dataSource={data} columns={columns} pagination={false} />
-      <Modal
-        title="Edit Contribution"
-        open={isModalVisible} 
-        onOk={save}
-        onCancel={cancel}
-      >
-        <Input
-          value={editFormData.title}
-          onChange={(e) => {
-            setEditFormData({ ...editFormData, title: e.target.value });
-          }}
-          placeholder="Title"
-          style={{ marginBottom: '15px', width: '100%' }}
-        />
-        <Upload
-          name="files"
-          customRequest={customRequest}
-          onChange={handleFileChange}
-          fileList={fileList}
-          multiple  
-          accept=".doc"
-          style={{  width: '100%' }}
-        >
-          <Button icon={<UploadOutlined />}>Upload Files</Button>
-        </Upload>
-        <Upload
-          name="images"
-          customRequest={customRequest}
-          onChange={handleImageChange}
-          fileList={imageList}
-          accept=".jpg,.png,.jpeg"
-          multiple
-          style={{  width: '100%' }}
-        >
-          <Button style={{ marginTop: '20px'}} icon={<UploadOutlined />}>Upload Images</Button>
-        </Upload>
-      </Modal>
-
-      <Modal
-        title="Add Comment"
-        open={isCommentModalVisible}
-        onOk={() => {
-          handleComment(editFormData.id);
-          setIsCommentModalVisible(false);
-        }}
-        onCancel={() => setIsCommentModalVisible(false)}
-      >
-        <Input
-          placeholder="Enter your comment"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-      </Modal>
-
-    </div>
+    <>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {contributions.map((contribution, index) => (
+            <Card
+                key={index}
+                style={{ width: 300, margin: 10 }}
+                cover={
+                <img
+                    alt={contribution.title}
+                    src={'https://th.bing.com/th/id/OIP.1EjjKwF1EODXnXekeJD8iwHaCq?w=325&h=125&c=7&r=0&o=5&pid=1.7'}
+                />
+                }
+                actions={[
+                  <DownloadOutlined
+                      style={{ fontSize: 15 }}
+                      onClick={() => handleDownload(contribution.contributionId)}
+                  />,
+                  <UnorderedListOutlined
+                      key="edit"
+                      onClick={() => showModal(contribution)}
+                  />,
+                  <EditOutlined 
+                    onClick={() => showEditModal(contribution)}
+                  />,
+                ]}
+            >
+                <Meta
+                title={contribution.title}
+                description={`Faculty: ${contribution.facultyName}`}
+                />
+            </Card>
+        ))}
+      </div>
+      <ContributionModal
+        contribution={selectedContribution}
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        onSaveComment={handleSaveComment}
+      />
+        <EditModal
+        visible={isEditModalVisible}
+        onCancel={handleCancel}
+        onSave={handleEdit}
+        contribution={selectedEditContribution}
+      />
+    </>
   );
-  
-  
 }
 
 export default MySubmission;

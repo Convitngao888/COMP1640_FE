@@ -1,165 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Modal, Select, Button, message, Input } from 'antd';
+import { Input, Button, message, Collapse } from 'antd';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
-const { Option } = Select;
+
 
 const MCpage = () => {
-  const { isAuthorized, userName } = useAuth();
   const [data, setData] = useState([]);
-  const [editFormData, setEditFormData] = useState({
-    id: null,
-    title: '',
-    approval: true,
-    comment: '',
-  });
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [approvalValue, setApprovalValue] = useState('Select Approval');
+  const { userName } = useAuth();
   const [newComment, setNewComment] = useState('');
-  const [isCommentModalVisible, setIsCommentModalVisible] = useState(false);
-
-  const columns = [
-    {
-      title: 'Contribution ID',
-      dataIndex: 'contributionId',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'User ID',
-      dataIndex: 'userId',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      render: (text) => text !== null ? text : '',
-    },
-    
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'Approval',
-      dataIndex: 'approval',
-      render: (text) => {
-        return text !== null ? (text  ? 'Approve' : 'Not Approve') : '';
-      },
-    },
-    {
-      title: 'Faculty Name',
-      dataIndex: 'facultyName',
-      render: (text) => text !== null ? text : '',
-    },
-    {
-      title: 'Comments',
-      dataIndex: 'commentions',
-      render: (text) => (
-        <div>
-          {text !== null && text.map((comment, index) => (
-            <div key={index}>{comment}<br/></div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      title: 'Actions',
-      dataIndex: 'operation',
-      render: (_, record) => (
-        <>
-          <Button onClick={() => edit(record.key)}>
-            Approve
-          </Button>
-          <Button style={{marginLeft: '8px'}} onClick={() => handleDownload(record.contributionId)}>
-            Download
-          </Button>
-          <Button
-            style={{ marginLeft: '8px' }}
-            onClick={() => {
-              setEditFormData({
-                id: record.contributionId,
-                approval: record.approval,
-              });
-              setIsCommentModalVisible(true);
-            }}
-          >
-            Comment
-          </Button>
-        </>
-      ),
-    },
-  ];
-
-  const edit = (key) => {
-    const record = data.find((item) => item.key === key);
-    if (!record) {
-      console.error('Record not found');
-      return;
-    }
   
-    setEditFormData({
-      id: record.contributionId,
-      approval: record.approval,
-    });
-
-    setApprovalValue(record.approval ? 'approve' : 'not-approve');
-
-    setIsModalVisible(true);
-  };
-
-  const cancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const save = async () => {
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-  
-      const dataToSend = {
-        approval: editFormData.approval,
-      };
-  
-      await axios.put(
-        `https://localhost:7021/api/Contributions/Review/${editFormData.id}`,
-        dataToSend,
-        config
-      );
-  
-      setIsModalVisible(false);
-  
-      const updatedData = data.map((item) => {
-        if (item.contributionId === editFormData.id) {
-          return {
-            ...item,
-            approval: editFormData.approval,
-          };
-        }
-        return item;
-      });
-      setData(updatedData);
-  
-      message.success('Update successful');
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
-
-  const handleInputChange = (field, value) => {
-    setEditFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
+  const { isAuthorized } = useAuth();
 
   const handleDownload = async (contributionId) => {
     try {
-      const response = await axios.get(`https://localhost:7021/api/Contributions/DownloadSelected/${contributionId}`, {
+      const response = await axios.get(`https://localhost:7021/api/Contributions/Download/${contributionId}`, {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -173,60 +28,54 @@ const MCpage = () => {
     }
   };
 
- const handleComment = async (contributionId) => {
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+  const handleSaveComment = async (contributionId) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
 
-    const commentData = {
-      commentions: newComment,
-      userName: userName,
-    };
+      const commentData = {
+        commentions: newComment,
+        userName: userName,
+      };
 
-    await axios.put(
-      `https://localhost:7021/api/Contributions/Comment/${contributionId}`,
-      commentData,
-      config
-    );
+      await axios.put(
+        `https://localhost:7021/api/Contributions/Comment/${contributionId}`,
+        commentData,
+        config
+      );
 
-    const newCommentions = `${userName} commented: ${newComment}`;
+      const newCommentions = `${userName} commented: ${newComment}`;
 
-    const updatedData = data.map((item) => {
-      if (item.contributionId === contributionId) {
-        let comments = item.commentions || []; // Xác định mảng comments, nếu item.commentions không tồn tại (null hoặc undefined), sử dụng mảng rỗng []
-        comments = [...comments, newCommentions]; // Thêm comment mới vào mảng comments
-        // Create a new object with the updated comments array
-        return {
-          ...item,
-          commentions: comments,
-        };
-      }
-      return item;
-    });
+      const updatedData = data.map((item) => {
+        if (item.contributionId === contributionId) {
+          let comments = item.commentions || [];
+          comments = [...comments, newCommentions]; // Add new comment to the beginning of the array
+          return {
+            ...item,
+            commentions: comments,
+          };
+        }
+        return item;
+      });
 
-    // Cập nhật lại state `data` sau khi cập nhật dữ liệu thành công
-    setData(updatedData);
-
-    message.success('Comment successful');
-  } catch (error) {
-    console.error('Error commenting:', error);
-    message.error('Failed to add comment');
-  }
-};
-  
-  
+      setData(updatedData);
+      setNewComment('');
+      message.success('Comment successful');
+    } catch (error) {
+      console.error('Error commenting:', error);
+      message.error('Failed to add comment');
+    }
+  };
+    
+    
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('https://localhost:7021/api/Contributions');
-        const data = response.data.map((item, index) => ({
-          ...item,
-          key: index.toString(),
-        }));
-        setData(data);
+        setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -235,53 +84,161 @@ const MCpage = () => {
     fetchData();
   }, []);
 
-  
+  const handleCommentChange = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  const handleApprove = async (contributionId) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      await axios.put(
+        `https://localhost:7021/api/Contributions/Review/${contributionId}`,
+        { approval: true },
+        config
+      );
+
+      const updatedData = data.map((item) =>
+        item.contributionId === contributionId ? { ...item, approval: true } : item
+      );
+
+      setData(updatedData);
+      message.success('Approved successfully');
+    } catch (error) {
+      console.error('Error approving:', error);
+      message.error('Failed to approve');
+    }
+  };
+
+  const handleReject = async (contributionId) => {
+    try {
+      await axios.delete(`https://localhost:7021/api/Contributions/${contributionId}`);
+
+      const updatedData = data.filter((item) => item.contributionId !== contributionId);
+
+      setData(updatedData);
+      message.success('Rejected successfully');
+    } catch (error) {
+      console.error('Error rejecting:', error);
+      message.error('Failed to reject');
+    }
+  };
+
+  const handleReset = async (contributionId) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      await axios.put(
+        `https://localhost:7021/api/Contributions/Review/${contributionId}`,
+        { approval: false },
+        config
+      );
+
+      const updatedData = data.map((item) =>
+        item.contributionId === contributionId ? { ...item, approval: false } : item
+      );
+
+      setData(updatedData);
+      message.success('Delete successfully');
+    } catch (error) {
+      console.error('Error resetting:', error);
+      message.error('Failed to reset');
+    }
+  };
 
   return (
     <div>
       {isAuthorized(3) ? (
         <>
-          <Table dataSource={data} columns={columns} pagination={false}/>
-          <Modal
-            title="Approval"
-            open={isModalVisible} 
-            onOk={save}
-            onCancel={cancel}
-          >
-            <Select
-              value={approvalValue}
-              onChange={(value) => {
-                setApprovalValue(value);
-                handleInputChange('approval', value === 'approve');
-              }}
-              style={{ width: '100%', marginTop: '10px' }}
-            >
-              <Option value="approve">Approve</Option>
-              <Option value="not-approve">Not Approve</Option>
-            </Select>
-          </Modal>
-
-          <Modal
-            title="Add Comment"
-            open={isCommentModalVisible}
-            onOk={() => {
-              handleComment(editFormData.id);
-              setIsCommentModalVisible(false);
-            }}
-            onCancel={() => setIsCommentModalVisible(false)}
-          >
-            <Input
-              placeholder="Enter your comment"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-          </Modal>
+          {data.map((contribution) => (
+            <Collapse key={contribution.contributionId} size="large" items={[{ 
+              key: contribution.contributionId.toString(), 
+              label: contribution.title,
+              children: (
+                <>
+                  <table>
+                    <tbody>
+                      <tr className='tr'>
+                        <th className='th'>Contribution ID</th>
+                        <td className='td'>{contribution.contributionId}</td>
+                      </tr>
+                      <tr className='tr'>
+                        <th className='th'>User ID</th>
+                        <td className='td'>{contribution.userId}</td>
+                      </tr>
+                      <tr className='tr'>
+                        <th className='th'>Status</th>
+                        <td className='td'>{contribution.status}</td>
+                      </tr>
+                      <tr className='tr'>
+                        <th className='th'>Faculty Name</th>
+                        <td className='td'>{contribution.facultyName}</td>
+                      </tr>
+                      <tr className='tr'>
+                        <th className='th'>Documents</th>
+                        <td className='td'><Button style={{padding: 0}} size="large" type="link" onClick={() => handleDownload(contribution.contributionId)}>Download</Button></td>
+                      </tr>
+                      <tr className='tr'>
+                        <th className='th'>Approval</th>
+                        <td className='td'>
+                          {contribution?.approval ? (
+                            <>
+                              <Button danger onClick={() => handleReset(contribution.contributionId)}>Resit</Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button type="primary" danger style={{background:'#66FF00', marginRight:'8px'}}  onClick={() => handleApprove(contribution.contributionId)}>Approve</Button>
+                              <Button type="primary" danger onClick={() => handleReject(contribution.contributionId)}>Reject</Button>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                      <tr className='tr'>
+                        <th className='th'>Comments</th>
+                        <td className='td' style={{ maxHeight: '320px', overflowY: 'scroll', display: 'block' }}>
+                          {contribution.commentions.map((comment, index) => (
+                            <div key={index} className="comment">
+                              {comment}
+                            </div>
+                          ))}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <Input.TextArea
+                    placeholder="Enter your comment..."
+                    value={newComment}
+                    onChange={handleCommentChange}
+                    rows={4}
+                  />
+                  <Button
+                    style={{ marginTop: '12px', float: 'right' }}
+                    key="save"
+                    type="primary"
+                    onClick={() => handleSaveComment(contribution.contributionId)}
+                  >
+                    Save Comment
+                  </Button>
+                  <div style={{ clear: 'both' }}></div>
+                </>
+              ),
+            }]} />
+          ))}
         </>
       ) : (
         <div>
           <Navigate to="/unAuthorized" />
         </div>
       )}
+      
     </div>
   );
 };

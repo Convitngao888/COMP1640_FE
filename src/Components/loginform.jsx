@@ -56,7 +56,7 @@ const LoginForm = () => {
             hideMessage();
 
             const responseData = await response.json();
-            login(responseData.accessToken, responseData.roleId, responseData.userId, responseData.userName);
+            login(responseData.accessToken, responseData.roleId, responseData.userId, responseData.userName, responseData.facultyName);
             
             // Redirect to desired page after successful login
             setTimeout(() => {

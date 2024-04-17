@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import './registerform.css';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaEye, FaEyeSlash, FaExclamationCircle,  } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash, FaExclamationCircle } from "react-icons/fa";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const RegisterForm = () => {
@@ -10,6 +10,7 @@ const RegisterForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [faculty, setFaculty] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [passwordEntered, setPasswordEntered] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
@@ -31,7 +32,7 @@ const RegisterForm = () => {
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
-        setPasswordsMatch(e.target.value === confirmPassword); // Kiểm tra khớp ngay sau khi thay đổi password
+        setPasswordsMatch(e.target.value === confirmPassword);
         if (e.target.value === '') {
             setPasswordEntered(false);
         } else {
@@ -41,7 +42,7 @@ const RegisterForm = () => {
 
     const handleConfirmPasswordChange = (e) => {
         setConfirmPassword(e.target.value);
-        setPasswordsMatch(e.target.value === password); // Kiểm tra khớp ngay sau khi thay đổi confirmPassword
+        setPasswordsMatch(e.target.value === password);
         if (passwordEntered === true && e.target.value !== '') {
             setPasswordsMatch(e.target.value === password);
         }
@@ -54,6 +55,10 @@ const RegisterForm = () => {
         } else {
             setPasswordsMatch(confirmPassword === password);
         }
+    };
+
+    const handleFacultyChange = (e) => {
+        setFaculty(e.target.value);
     };
 
     const hideMessage = () => {
@@ -81,7 +86,8 @@ const RegisterForm = () => {
                 },
                 body: JSON.stringify({
                     userName: username,
-                    password: password
+                    password: password,
+                    facultyName: faculty
                 })
             });
 
@@ -90,11 +96,10 @@ const RegisterForm = () => {
                     setErrorMessage('Username already exists');
                     setSuccessMessage('');
                 } else {
-                    // Xử lý các trường hợp lỗi khác nếu cần
                     setErrorMessage('Registration failed. Please try again.');
                     setSuccessMessage('');
                 }
-                hideMessage() // Ẩn thông báo sau 2 giây
+                hideMessage();
                 return;
             }
 
@@ -107,7 +112,6 @@ const RegisterForm = () => {
                 navigate('/');
             }, 2000);
         } catch (error) {
-            // Xử lý lỗi nếu có
             setErrorMessage('UnKnown Error Occurred');
             setSuccessMessage('');
             hideMessage();
@@ -152,7 +156,7 @@ const RegisterForm = () => {
                             placeholder='Confirm Password'
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
-                            onFocus={handleConfirmPasswordBlur}
+                            onBlur={handleConfirmPasswordBlur}
                             required
                         />
                         {showPassword ? (
@@ -164,17 +168,26 @@ const RegisterForm = () => {
                             <div className="errorMessage">Passwords do not match !</div>
                         )}
                     </div>
+                        <div className="input-box">
+                            <select className="select"
+                                value={faculty}
+                                onChange={handleFacultyChange}
+                                required
+                            >
+                                <option className="option" value="">Select Faculty</option>
+                                <option className="option" value="Computer Science">Computer Science</option>
+                                <option className="option" value="Business Administration">Business Administration</option>
+                                <option className="option" value="Graphic Design">Graphic Design</option>
+                            </select>
+                        </div>
                     <button type="submit">Register</button>
-
                     <div className="login-link">
                         <div>Already have an account? <div onClick={handleLoginClick}>Login</div></div>
                     </div>
-
                 </form>
             </div>
-
             <TransitionGroup className="messages">
-            {errorMessage && (
+                {errorMessage && (
                     <CSSTransition
                         classNames="messages"
                         key="error"
@@ -186,7 +199,6 @@ const RegisterForm = () => {
                         </div>
                     </CSSTransition>
                 )}
-
                 {successMessage && (
                     <CSSTransition
                         classNames="messages"
