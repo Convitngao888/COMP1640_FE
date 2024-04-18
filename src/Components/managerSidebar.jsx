@@ -4,7 +4,7 @@ import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  VideoCameraOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 
@@ -38,7 +38,7 @@ const SideBarMM = () => {
             items={[
               {
                 key: '1',
-                icon: <VideoCameraOutlined />,
+                icon: <UnorderedListOutlined />,
                 label: 'MC Page',
               },
             ]}

@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
-import Adminpage from './adminpage';
-import Chartpage from './chartpage';
-import CreateAccountPage from './createAccountPage';
+import ProfilePage from './profilePage';
+import EditProfilePage from './editProfilePage';
 import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PieChartOutlined,
-  CalendarOutlined,
-  UserAddOutlined,
+  ProfileOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 
-const SideBarAdmin = () => {
+const SideBarProfile = () => {
   const navigate = useNavigate();
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
   const [collapsed, setCollapsed] = useState(false);
   const menuComponents = {
-    '1': <Adminpage />,
-    '2': <Chartpage/>,
-    '3':<CreateAccountPage/>
+    '1': <ProfilePage />,
+    '2':<EditProfilePage/>,
   };
   
   const {
@@ -43,18 +40,13 @@ const SideBarAdmin = () => {
             items={[
               {
                 key: '1',
-                icon: <CalendarOutlined />,
-                label: 'Submit Page',
+                icon: <ProfileOutlined />,
+                label: 'Profile Page',
               },
               {
                 key: '2',
-                icon: <PieChartOutlined />,
-                label: 'Statistic',
-              },
-              {
-                key: '3',
-                icon: <UserAddOutlined />,
-                label: 'Create Account',
+                icon: <EditOutlined />,
+                label: 'Edit Profile',
               },
             ]}
           />
@@ -97,4 +89,4 @@ const SideBarAdmin = () => {
       </Layout>
   );
 };
-export default SideBarAdmin;
+export default SideBarProfile;

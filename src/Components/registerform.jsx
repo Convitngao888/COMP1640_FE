@@ -1,22 +1,42 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import './registerform.css';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaEye, FaEyeSlash, FaExclamationCircle } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash, FaExclamationCircle,  } from "react-icons/fa";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { DownOutlined, MailOutlined } from '@ant-design/icons';
 
 const RegisterForm = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [facultyOptions, setFacultyOptions] = useState([]);
     const [faculty, setFaculty] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [passwordEntered, setPasswordEntered] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    const timeoutRef = useRef(null);
+    useEffect(() => {
+        const fetchFaculties = async () => {
+            try {
+                const response = await fetch('https://localhost:7021/api/Faculties');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch faculties');
+                }
+                const data = await response.json();
+                // Filter out the faculty with name "None"
+                const filteredFaculties = data.filter(faculty => faculty.facultyName !== "None");
+                setFacultyOptions(filteredFaculties);
+            } catch (error) {
+                console.error('Error fetching faculties:', error);
+            }
+        };
+
+        fetchFaculties();
+    }, []);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -24,6 +44,10 @@ const RegisterForm = () => {
 
     const handleLoginClick = () => {
         navigate('/');
+    };
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
     };
 
     const handleUsernameChange = (e) => {
@@ -62,10 +86,7 @@ const RegisterForm = () => {
     };
 
     const hideMessage = () => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-        }
-        timeoutRef.current = setTimeout(() => {
+        setTimeout(() => {
             setErrorMessage('');
             setSuccessMessage('');
         }, 2000);
@@ -87,16 +108,16 @@ const RegisterForm = () => {
                 body: JSON.stringify({
                     userName: username,
                     password: password,
-                    facultyName: faculty
+                    facultyName: faculty,
+                    email: email,
                 })
             });
-
             if (!response.ok) {
                 if (response.status === 409) {
                     setErrorMessage('Username already exists');
                     setSuccessMessage('');
-                } else {
-                    setErrorMessage('Registration failed. Please try again.');
+                } else if(response.status === 400) {
+                    setErrorMessage('Please input valid Email');
                     setSuccessMessage('');
                 }
                 hideMessage();
@@ -112,7 +133,7 @@ const RegisterForm = () => {
                 navigate('/');
             }, 2000);
         } catch (error) {
-            setErrorMessage('UnKnown Error Occurred');
+            setErrorMessage('Unknown Error Occurred');
             setSuccessMessage('');
             hideMessage();
         }
@@ -123,6 +144,16 @@ const RegisterForm = () => {
             <div className='wrapper'>
                 <form onSubmit={handleSubmit}>
                     <h1>Register</h1>
+                    <div className="input-box">
+                        <input
+                            type="text"
+                            placeholder='Email'
+                            value={email}
+                            onChange={handleEmailChange}
+                            required
+                        />
+                        <MailOutlined  className="icon" />
+                    </div>
                     <div className="input-box">
                         <input
                             type="text"
@@ -168,18 +199,19 @@ const RegisterForm = () => {
                             <div className="errorMessage">Passwords do not match !</div>
                         )}
                     </div>
-                        <div className="input-box">
-                            <select className="select"
-                                value={faculty}
-                                onChange={handleFacultyChange}
-                                required
-                            >
-                                <option className="option" value="">Select Faculty</option>
-                                <option className="option" value="Computer Science">Computer Science</option>
-                                <option className="option" value="Business Administration">Business Administration</option>
-                                <option className="option" value="Graphic Design">Graphic Design</option>
-                            </select>
-                        </div>
+                    <div className="input-box">
+                        <select className="select"
+                            value={faculty}
+                            onChange={handleFacultyChange}
+                            required
+                        >
+                            <option className="option" value="">Select Faculty  </option>
+                            {facultyOptions.map(option => (
+                                <option className="option" key={option.facultyId} value={option.facultyName}>{option.facultyName}</option>
+                            ))}
+                        </select>
+                        <DownOutlined className="icon"/>
+                    </div>
                     <button type="submit">Register</button>
                     <div className="login-link">
                         <div>Already have an account? <div onClick={handleLoginClick}>Login</div></div>

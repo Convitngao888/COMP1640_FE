@@ -33,7 +33,7 @@ const Chartpage = () => {
     datasets: [
       {
         label: 'Percentage',
-        data: data.map(item => parseFloat(item.percentage)),
+        data: data.map(item => parseFloat(item.percentage).toFixed(2)),
         backgroundColor: [
           'rgba(255, 99, 132, 0.6)',
           'rgba(54, 162, 235, 0.6)',
@@ -46,11 +46,6 @@ const Chartpage = () => {
     ],
   };
 
-  const options = {
-    legend: {
-      position: 'bottom',
-    },
-  };
 
   return (
     <div>
@@ -58,7 +53,7 @@ const Chartpage = () => {
         <>
           <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
             <h2>Percentage of Contributions by Faculty</h2>
-            <Pie ref={chartRef} data={chartData} options={options} />
+            <Pie ref={chartRef} data={chartData}/>
           </div>
         </>
       ) : (

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Input, Button, message, Upload,  } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Input, Button, message, Upload, Select   } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 
+const { Option } = Select;
 
 const Studentpage = () => {
   const { isAuthorized, userId, facultyName } = useAuth();
@@ -12,6 +13,25 @@ const Studentpage = () => {
   const [fileList, setFileList] = useState([]);
   const [imageList, setImageList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [academicYearsOptions, setAcademicYearsOptions] = useState([]);
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState('');
+
+  useEffect(() => {
+    const fetchAcademicYears = async () => {
+      try {
+        const response = await fetch('https://localhost:7021/api/AcademicYears');
+        if (!response.ok) {
+          throw new Error('Failed to fetch academic years');
+        }
+        const data = await response.json();
+        setAcademicYearsOptions(data);
+      } catch (error) {
+        console.error('Error fetching academic years:', error);
+      }
+    };
+
+    fetchAcademicYears();
+  }, []);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -25,9 +45,12 @@ const Studentpage = () => {
     setImageList(info.fileList);
   };
 
+  const handleAcademicYearChange = (value) => {
+    setSelectedAcademicYear(value);
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
-    const academicYearsId = 9
     try {
       const formData = new FormData();
       fileList.forEach((file) => {
@@ -39,7 +62,7 @@ const Studentpage = () => {
       formData.append('userId', userId);
       formData.append('title', title);
       formData.append('facultyName', facultyName);
-      formData.append('academicYearsId', academicYearsId);
+      formData.append('academic', selectedAcademicYear);
 
       const response = await fetch('https://localhost:7021/api/Contributions/AddArticles', {
         method: 'POST',
@@ -51,8 +74,10 @@ const Studentpage = () => {
         setTitle('');
         setFileList([]);
         setImageList([]);
+        setSelectedAcademicYear('')
       } else {
-        message.error('Invalid input, Please try again');
+        const errorMessage = await response.text();
+        message.error(errorMessage);
       }
     } catch (error) {
       console.error('Error adding article:', error);
@@ -90,6 +115,15 @@ const Studentpage = () => {
                 onChange={handleTitleChange}
                 style={{ marginBottom: '15px', width: '100%' }}
               />
+              <Select
+                placeholder="Select Academic Year"
+                onChange={handleAcademicYearChange}
+                style={{ marginBottom: '15px', width: '100%' }}
+              >
+                {academicYearsOptions.map(year => (
+                  <Option key={year.academicYearsId} value={year.academicYear}>{year.academicYear}</Option>
+                ))}
+              </Select>
               <Upload
                 name="files"
                 customRequest={customRequest}

@@ -9,6 +9,7 @@ import SideBarMC from './Components/sideBarMC';
 import UnAuthorized from './Components/unAuthorized';
 import SideBarMM from './Components/managerSidebar';
 import SideBarAdmin from './Components/sideBarAdmin';
+import SideBarProfile from './Components/sideBarProfile';
 function App() {
 
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/unAuthorized" element = {<UnAuthorized/>}/>
           <Route path="/SideBarMM" element = {<SideBarMM/>}/>
           <Route path="/SideBarAdmin" element = {<SideBarAdmin/>}/>
+          <Route path="/SideBarProfile" element = {<SideBarProfile/>}/>
       </Routes>
     </Router>
   );

@@ -7,7 +7,8 @@ import { useAuth } from './AuthContext';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  VideoCameraOutlined,
+  InboxOutlined,
+  NotificationOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 
@@ -43,12 +44,12 @@ const SideBarMC = () => {
             items={[
               {
                 key: '1',
-                icon: <VideoCameraOutlined />,
+                icon: <InboxOutlined />,
                 label: 'MC Page',
               },
               {
                 key: '2',
-                icon: <VideoCameraOutlined />,
+                icon: <NotificationOutlined />,
                 label: 'Notification',
               },
             ]}

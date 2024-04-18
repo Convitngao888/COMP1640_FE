@@ -1,25 +1,21 @@
 import './homepage.css'
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { Layout, Menu, theme, Card, message } from 'antd';
+import { Layout, Menu, theme, Card, message, Avatar, Dropdown,} from 'antd';
 import React, { useState, useEffect,  } from 'react';
 import axios from 'axios';
-import { DownloadOutlined,  } from '@ant-design/icons';
+import { DownloadOutlined, UserOutlined } from '@ant-design/icons';
 
 const { Meta } = Card;
 const { Header, Content, Footer } = Layout;
-
 
 
 const Homepage = () => {
     const [contributions, setContributions] = useState([]);
     const navigate = useNavigate();
     const { accessToken, logout } = useAuth();
-    
-
-    const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();
+    const {token: { colorBgContainer, borderRadiusLG },} = theme.useToken();
+        
     const handleLogout = () => {
         logout();
         navigate('/');
@@ -36,7 +32,9 @@ const Homepage = () => {
     const handleAccessAdmin = () => {
         navigate('/SideBarAdmin');
     }
-
+    const handleAccessProfile = () => {
+        navigate('/SideBarProfile');
+    }
     const handleDownload = async (contributionId) => {
         try {
           const response = await axios.get(`https://localhost:7021/api/Contributions/Download/${contributionId}`, {
@@ -51,7 +49,21 @@ const Homepage = () => {
         } catch (error) {
           message.error('Failed to download ZIP');
         }
-      };
+    };
+    const items = [
+    {
+        key: '1',
+        label: (
+        <p style={{padding:'0px 24px', fontWeight: 'bold' }} onClick={handleAccessProfile}>Profile</p>
+        ),
+    },
+    {
+        key: '2',
+        label: (
+        <p style={{padding:'0px 24px', fontWeight: 'bold'}} onClick={handleLogout}>Logout</p>
+        ),
+    },
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,9 +78,9 @@ const Homepage = () => {
         };
     
         fetchData();
-      }, []);
+    }, []);
     
-   
+      
       
     return (
         accessToken ? (
@@ -95,18 +107,26 @@ const Homepage = () => {
                             <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="student" onClick={handleAccessStudent}>
                                 STUDENT
                             </Menu.Item>
-                            <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="admin" onClick={handleAccessMC}>
+                            <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="MC" onClick={handleAccessMC}>
                                 MARKETING COORDINATOR
                             </Menu.Item>
-                            <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="admin" onClick={handleAccessManager}>
+                            <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="MM" onClick={handleAccessManager}>
                                 MARKETING MANAGER
                             </Menu.Item>
                             <Menu.Item style={{fontSize: 16, fontWeight: 'bold'}} key="admin" onClick={handleAccessAdmin}>
                                 ADMIN
-                            </Menu.Item>
-                            <Menu.Item style={{marginLeft: 'auto', fontSize: 16, fontWeight: 'bold'}} key="logout" onClick={handleLogout}>
-                                LOGOUT
-                            </Menu.Item>    
+                            </Menu.Item> 
+                            <Menu.Item style={{marginLeft:'auto', fontSize: 16, fontWeight: 'bold',cursor: 'default',  background: 'none', }}>
+                                <Dropdown
+                                    menu={{
+                                    items,
+                                    }}
+                                    placement="bottom"
+                                    size = "Large"
+                                >
+                                    <Avatar style={{ backgroundColor: 'rgb(41 53 125)', }}size="large" icon={<UserOutlined />} />
+                                </Dropdown>
+                            </Menu.Item>     
                         </Menu>
                     </Header>
                     <br/>
@@ -128,28 +148,28 @@ const Homepage = () => {
                              {/* nội dung API */}
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 {contributions.map((contribution, index) => (
-                                        <Card
-                                            key={index}
-                                            style={{ width: 300, margin: 10 }}
-                                            cover={
-                                            <img
-                                                alt={contribution.title}
-                                                src={'https://th.bing.com/th/id/OIP.1EjjKwF1EODXnXekeJD8iwHaCq?w=325&h=125&c=7&r=0&o=5&pid=1.7'}
-                                            />
-                                            }
-                                            actions={[
-                                            <DownloadOutlined
-                                                style={{ fontSize: 15 }}
-                                                onClick={() => handleDownload(contribution.contributionId)}
-                                            />,
-                                          
-                                            ]}
-                                        >
-                                            <Meta
-                                            title={contribution.title}
-                                            description={`Faculty: ${contribution.facultyName}`}
-                                            />
-                                        </Card>
+                                    <Card
+                                        key={index}
+                                        style={{ width: 300, margin: 10 }}
+                                        cover={
+                                        <img
+                                            alt={contribution.title}
+                                            src={'https://th.bing.com/th/id/OIP.1EjjKwF1EODXnXekeJD8iwHaCq?w=325&h=125&c=7&r=0&o=5&pid=1.7'}
+                                        />
+                                        }
+                                        actions={[
+                                        <DownloadOutlined
+                                            style={{ fontSize: 15 }}
+                                            onClick={() => handleDownload(contribution.contributionId)}
+                                        />,
+                                        
+                                        ]}
+                                    >
+                                        <Meta
+                                        title={contribution.title}
+                                        description={`Faculty: ${contribution.facultyName}`}
+                                        />
+                                    </Card>
                                 ))}
                                
                             </div>

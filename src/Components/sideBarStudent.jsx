@@ -6,7 +6,9 @@ import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  VideoCameraOutlined,
+  AppstoreAddOutlined,
+  SnippetsOutlined,
+  NotificationOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 
@@ -41,17 +43,17 @@ const SideBar = () => {
             items={[
               {
                 key: '1',
-                icon: <VideoCameraOutlined />,
+                icon: <AppstoreAddOutlined />,
                 label: 'Submit Page',
               },
               {
                 key: '2',
-                icon: <VideoCameraOutlined />,
+                icon: <SnippetsOutlined />,
                 label: 'My Article',
               },
               {
                 key: '3',
-                icon: <VideoCameraOutlined />,
+                icon: <NotificationOutlined />,
                 label: 'Notification',
               },
             ]}
