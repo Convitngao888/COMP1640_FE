@@ -1,5 +1,6 @@
-import { Form, Input, Button, message } from 'antd';
-import React, { useEffect } from 'react';
+import { Form, Input, Button, message, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 
@@ -15,6 +16,22 @@ const layout = {
 const EditProfilePage = () => {
   const [form] = Form.useForm();
   const { userId } = useAuth();
+  const [image, setImage] = useState([]);
+
+  
+  const handleImageChange = (info) => {
+    setImage(info.fileList); // fileList is an array of file objects
+  };
+  
+  const customRequest = async ({ file, onSuccess }) => {
+    // Giả lập việc upload thành công với URL của file
+    
+      const fileUrl = 'ALAMAK';
+      onSuccess(fileUrl);
+    
+  };
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +50,25 @@ const EditProfilePage = () => {
       }
     };
     fetchData();    
-  }, );
+  });
+  const handleEditImage = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("avatar", image[0].originFileObj);
+  
+      await axios.put(`https://localhost:7021/api/Users/UploadImages${userId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      message.success('Image updated successfully!');
+    } catch (error) {
+      console.error('Error editing image:', error);
+      message.error('Failed to edit image');
+    }
+  };
+
 
   const onFinish = async (values) => {
     try {
@@ -136,6 +171,40 @@ const EditProfilePage = () => {
         >
           <Button type="primary" htmlType="submit">
             Edit
+          </Button>
+        </Form.Item>
+        <Form.Item
+          name="avatar"
+          label="Avatar"
+          rules={[
+              {
+                  required: true,
+                  message: 'Please upload your Avartar!',
+                  whitespace: true,
+              },
+          ]}
+          >
+            <Upload
+              name="images"
+              customRequest={customRequest}
+              onChange={handleImageChange}
+              fileList={image}
+              accept=".jpg,.png,.jpeg"
+              style={{ marginBottom: '15px', width: '100%' }}
+            >
+              <Button style={{ marginTop: '20px' }} icon={<UploadOutlined />}>
+                Upload Images
+              </Button>
+            </Upload>
+        </Form.Item>
+        <Form.Item
+          wrapperCol={{
+            ...layout.wrapperCol,
+            offset: 8,
+          }}
+        >
+          <Button type="primary" onClick={handleEditImage}>
+            Edit Image
           </Button>
         </Form.Item>
       </Form>
