@@ -48,8 +48,8 @@ const ContributionModal = ({ contribution, visible, onCancel, onSaveComment }) =
           </tr>
           <tr className='tr'>
             <th className='th' >Comments</th>
-            <td className='td' style={{maxHeight:'320px', overflowY: 'scroll', display:'block'}}>
-              {contribution?.commentions.map((comment, index) => (
+            <td className='td' style={{ maxHeight: '320px', overflowY: 'scroll', display: 'block' }}>
+              {contribution?.commentions?.map((comment, index) => (
                 <div key={index} className="comment">
                   {comment}
                 </div>
