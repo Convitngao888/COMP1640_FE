@@ -1,6 +1,7 @@
-import { Modal, Input, Upload, Button,  } from 'antd';
+import { Modal, Input, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import React, { useState,  } from 'react';
+import axios from 'axios';
 
 const EditModal = ({ contribution, visible, onCancel, onSave }) => {
   const [title, setTitle] = useState('');
@@ -23,16 +24,64 @@ const EditModal = ({ contribution, visible, onCancel, onSave }) => {
   };
 
   const handleEdit = async () => {
-    const files = fileList.map((file) => file.originFileObj);
-    const images = imageList.map((image) => image.originFileObj);
+    try {
+      const promises = [];
+  
+      if (title !== "") {
+        const formData = new FormData();
+        formData.append('title', title);
+        const titlePromise = axios.put(`https://localhost:7021/api/Contributions/EditTitle/${contribution.contributionId}`, formData);
+        promises.push(titlePromise);
+      }
+  
+      if (fileList.length !== 0) {
+        const fileFormData = new FormData();
+        fileList.forEach(file => {
+          fileFormData.append('files', file.originFileObj);
+        });
+        const filePromise = axios.put(`https://localhost:7021/api/Contributions/EditFiles/${contribution.contributionId}`, fileFormData);
+        promises.push(filePromise);
+      }
+  
+      if (imageList.length !== 0) {
+        const imageFormData = new FormData();
+        imageList.forEach(image => {
+          imageFormData.append('files', image.originFileObj);
+        });
+        const imagePromise = axios.put(`https://localhost:7021/api/Contributions/EditImage/${contribution.contributionId}`, imageFormData);
+        promises.push(imagePromise);
+      }
+  
+      const responses = await Promise.all(promises);
+  
+      // Xử lý các response nếu cần
+      responses.forEach(response => {
+        if (title !== "" && response.config.url.includes("EditTitle")) {
+          contribution.title = response.data;
+          setTitle('')
+        }
 
-    onSave({ title, files, images });
-
-    // Sau khi gọi API thành công, cập nhật lại giá trị của state
-    setTitle('');
-    setFileList([]);
-    setImageList([]);
+        if (fileList.length !== 0 && response.config.url.includes("EditFiles")) {
+          contribution.filePaths = response.data;
+          setFileList([]);
+        } 
+        
+        if (imageList.length !== 0 && response.config.url.includes("EditImage")) {
+          contribution.imagePaths = response.data;
+          setImageList([]);
+        }
+      });
+  
+      message.success('Contribution updated successfully');
+      onSave(contribution); // Gửi contribution đã cập nhật ra ngoài
+    } catch (error) {
+      message.error('Failed to update contribution');
+      console.error('Error:', error);
+    }
   };
+  
+  
+
   const customRequest = async ({ file, onSuccess }) => {
     // Giả lập việc upload thành công với URL của file
     
@@ -50,8 +99,8 @@ const EditModal = ({ contribution, visible, onCancel, onSave }) => {
           Cancel
         </Button>,
         <Button type="primary" onClick={handleEdit}>
-        Edit
-      </Button>
+          Edit
+        </Button>
       ]}
       width={1000}
     >

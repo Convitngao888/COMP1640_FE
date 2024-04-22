@@ -191,6 +191,7 @@ const EditProfilePage = () => {
               fileList={image}
               accept=".jpg,.png,.jpeg"
               style={{ marginBottom: '15px', width: '100%' }}
+              maxCount={1}
             >
               <Button style={{ marginTop: '20px' }} icon={<UploadOutlined />}>
                 Upload Images

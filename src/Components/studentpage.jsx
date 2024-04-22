@@ -5,11 +5,13 @@ import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const Studentpage = () => {
   const { isAuthorized, userId, facultyName } = useAuth();
 
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [fileList, setFileList] = useState([]);
   const [imageList, setImageList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +37,9 @@ const Studentpage = () => {
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
+  };
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
   };
 
   const handleFileChange = (info) => {
@@ -62,6 +67,7 @@ const Studentpage = () => {
       formData.append('userId', userId);
       formData.append('title', title);
       formData.append('facultyName', facultyName);
+      formData.append('description', description);
       formData.append('academic', selectedAcademicYear);
 
       const response = await fetch('https://localhost:7021/api/Contributions/AddArticles', {
@@ -74,7 +80,7 @@ const Studentpage = () => {
         setTitle('');
         setFileList([]);
         setImageList([]);
-        setSelectedAcademicYear('')
+        setDescription('')
       } else {
         const errorMessage = await response.text();
         message.error(errorMessage);
@@ -124,6 +130,13 @@ const Studentpage = () => {
                   <Option key={year.academicYearsId} value={year.academicYear}>{year.academicYear}</Option>
                 ))}
               </Select>
+              <TextArea 
+                value={description} 
+                rows={4} 
+                placeholder="Description"
+                onChange={handleDescriptionChange}
+                style={{ marginBottom: '15px', width: '100%' }}
+              />
               <Upload
                 name="files"
                 customRequest={customRequest}

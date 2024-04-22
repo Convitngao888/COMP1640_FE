@@ -1,7 +1,7 @@
 import './homepage.css'
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import { Layout, Menu, theme, Card, message, Avatar, Dropdown,} from 'antd';
+import { Layout, Menu, theme, Card, message, Avatar, Dropdown, Popover, Button,} from 'antd';
 import React, { useState, useEffect,  } from 'react';
 import axios from 'axios';
 import { DownloadOutlined, UserOutlined } from '@ant-design/icons';
@@ -166,9 +166,12 @@ const Homepage = () => {
                                         ]}
                                     >
                                         <Meta
-                                        title={contribution.title}
-                                        description={`Faculty: ${contribution.facultyName}`}
+                                            title={contribution.title}
+                                            description={`Faculty: ${contribution.facultyName}`}
                                         />
+                                        <Popover overlayStyle={{ maxWidth: '440px' }} placement="bottom" title={'Description'} content={contribution.description}>
+                                            <Button style ={{padding: 0 }} type="link">View Description</Button>
+                                        </Popover>
                                     </Card>
                                 ))}
                                

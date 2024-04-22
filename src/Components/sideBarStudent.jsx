@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Studentpage from './studentpage';
 import MySubmission from './mySubmission';
 import NotificationPage from './notifiPage';
+import AllContributionInFaculty from './allContributionInFaculty';
 import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
@@ -9,6 +10,7 @@ import {
   AppstoreAddOutlined,
   SnippetsOutlined,
   NotificationOutlined,
+  FileDoneOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 
@@ -21,7 +23,8 @@ const SideBar = () => {
   const menuComponents = {
     '1': <Studentpage />,
     '2': <MySubmission />,
-    '3': <NotificationPage/>
+    '3': <AllContributionInFaculty/>,
+    '4': <NotificationPage/>
   };
   
   const {
@@ -53,6 +56,11 @@ const SideBar = () => {
               },
               {
                 key: '3',
+                icon: <FileDoneOutlined />,
+                label: 'Accepted Contribution In Falcuty',
+              },
+              {
+                key: '4',
                 icon: <NotificationOutlined />,
                 label: 'Notification',
               },

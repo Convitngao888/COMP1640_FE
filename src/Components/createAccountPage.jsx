@@ -128,7 +128,7 @@ const CreateAccountPage = () => {
         ]}
         >
         <Select
-            placeholder="Select Academic Year"
+            placeholder="Select Faculty"
             style={{ marginBottom: '15px', width: '100%' }}
             onChange={handleFaculty} // Trigger validation on selection
         >
