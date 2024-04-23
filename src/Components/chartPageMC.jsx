@@ -3,25 +3,26 @@ import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 import { Chart } from 'chart.js';
 
-const Chartpage = () => {
-  const { isAuthorized } = useAuth();
+const ChartPageMC = () => {
+  const { isAuthorized, facultyName } = useAuth();
   const [contributions, setContributions] = useState([]);
   const [chart, setChart] = useState(null);
 
-  // Hàm gọi API và lấy dữ liệu
-  const fetchData = async () => {
-    try {
-      const res = await fetch('https://localhost:7021/api/Contributions');
-      const data = await res.json();
-      setContributions(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  
 
   useEffect(() => {
+    // Hàm gọi API và lấy dữ liệu
+    const fetchData = async () => {
+        try {
+        const res = await fetch(`https://localhost:7021/api/Contributions/GetContributionsByFaculty?facultyName=${facultyName}`);
+        const data = await res.json();
+        setContributions(data);
+        } catch (error) {
+        console.error('Error fetching data:', error);
+        }
+    };
     fetchData();
-  }, []);
+  }, [facultyName]);
 
   useEffect(() => {
     if (contributions.length > 0) {
@@ -104,7 +105,7 @@ const Chartpage = () => {
 
   return (
     <div>
-      {isAuthorized(4) ? (
+      {isAuthorized(3) ? (
         <>
           {/* Hiển thị biểu đồ */}
           <canvas id="myChart" style={{ maxWidth: '2000px', maxHeight: '750px' }}></canvas>
@@ -118,4 +119,4 @@ const Chartpage = () => {
   );
 };
 
-export default Chartpage;
+export default ChartPageMC;

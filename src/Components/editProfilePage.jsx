@@ -51,12 +51,13 @@ const EditProfilePage = () => {
     };
     fetchData();    
   });
+
   const handleEditImage = async () => {
     try {
       const formData = new FormData();
       formData.append("avatar", image[0].originFileObj);
   
-      await axios.put(`https://localhost:7021/api/Users/UploadImages${userId}`, formData, {
+      await axios.put(`https://localhost:7021/api/Users/UploadImages/${userId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -65,7 +66,7 @@ const EditProfilePage = () => {
       message.success('Image updated successfully!');
     } catch (error) {
       console.error('Error editing image:', error);
-      message.error('Failed to edit image');
+      message.error('Please Input Image');
     }
   };
 
@@ -73,7 +74,7 @@ const EditProfilePage = () => {
   const onFinish = async (values) => {
     try {
       const { userName, password, email } = values;
-      await axios.put(`https://localhost:7021/api/Users/ChangeUsername/${userId}`, {
+      await axios.put(`https://localhost:7021/api/Users/EditProfile/${userId}`, {
         userName,
         password,
         email
@@ -120,9 +121,9 @@ const EditProfilePage = () => {
             label="Username"
             rules={[
                 {
-                required: true,
-                message: 'Please input your Username!',
-                whitespace: true,
+                  required: true,
+                  message: 'Please input your Username!',
+                  whitespace: true,
                 },
             ]}
             >
@@ -178,9 +179,7 @@ const EditProfilePage = () => {
           label="Avatar"
           rules={[
               {
-                  required: true,
-                  message: 'Please upload your Avartar!',
-                  whitespace: true,
+                whitespace: true,
               },
           ]}
           >

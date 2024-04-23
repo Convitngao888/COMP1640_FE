@@ -3,11 +3,13 @@ import MCpage from './MarketingCoordinator';
 import NotificationPage from './notifiPage';
 import { useNavigate, } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import ChartPageMC from './chartPageMC';
 
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   InboxOutlined,
+  BarChartOutlined,
   NotificationOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
@@ -22,7 +24,8 @@ const SideBarMC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const menuComponents = {
     '1': <MCpage />,
-    '2':<NotificationPage/>
+    '2':<NotificationPage/>,
+    '3':<ChartPageMC/>
   };
   
   const {
@@ -51,6 +54,11 @@ const SideBarMC = () => {
                 key: '2',
                 icon: <NotificationOutlined />,
                 label: 'Notification',
+              },
+              {
+                key: '3',
+                icon: <BarChartOutlined />,
+                label: 'Statistic',
               },
             ]}
           />

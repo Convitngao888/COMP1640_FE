@@ -6,7 +6,7 @@ import { useNavigate, } from 'react-router-dom';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PieChartOutlined,
+  BarChartOutlined,
   CalendarOutlined,
   UserAddOutlined,
 } from '@ant-design/icons';
@@ -44,11 +44,11 @@ const SideBarAdmin = () => {
               {
                 key: '1',
                 icon: <CalendarOutlined />,
-                label: 'Submit Page',
+                label: 'Create Academic Year',
               },
               {
                 key: '2',
-                icon: <PieChartOutlined />,
+                icon: <BarChartOutlined />,
                 label: 'Statistic',
               },
               {
