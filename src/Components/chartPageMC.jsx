@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
-import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto'; 
 
 const ChartPageMC = () => {
   const { isAuthorized, facultyName } = useAuth();
   const [contributions, setContributions] = useState([]);
   const [chart, setChart] = useState(null);
 
-  
-
   useEffect(() => {
-    // Hàm gọi API và lấy dữ liệu
     const fetchData = async () => {
-        try {
+      try {
         const res = await fetch(`https://localhost:7021/api/Contributions/GetContributionsByFaculty?facultyName=${facultyName}`);
         const data = await res.json();
         setContributions(data);
-        } catch (error) {
+      } catch (error) {
         console.error('Error fetching data:', error);
-        }
+      }
     };
     fetchData();
   }, [facultyName]);
@@ -28,7 +25,7 @@ const ChartPageMC = () => {
     if (contributions.length > 0) {
       renderChart();
     }
-  // eslint-disable-next-line
+      // eslint-disable-next-line
   }, [contributions]);
 
   const renderChart = () => {
