@@ -11,10 +11,8 @@ import {
   SnippetsOutlined,
   NotificationOutlined,
   FileDoneOutlined,
-  MessageOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
-import ChatBox from './ChatBox';
 
 const { Header, Sider, Content } = Layout;
 
@@ -27,7 +25,6 @@ const SideBar = () => {
     '2': <MySubmission />,
     '3': <AllContributionInFaculty />,
     '4': <NotificationPage />,
-    '5': <ChatBox />
   };
 
   const {
@@ -66,11 +63,6 @@ const SideBar = () => {
               key: '4',
               icon: <NotificationOutlined />,
               label: 'Notification',
-            },
-            {
-              key: '5',
-              icon: <MessageOutlined />,
-              label: 'ChatBox',
             },
           ]}
         />
