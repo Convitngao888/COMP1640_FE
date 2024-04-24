@@ -13,7 +13,7 @@ const { Header, Content, Footer } = Layout;
 const Homepage = () => {
     const [contributions, setContributions] = useState([]);
     const navigate = useNavigate();
-    const { accessToken, logout, userId, facultyName, } = useAuth();
+    const { accessToken, logout, userId, } = useAuth();
     const {token: { colorBgContainer, borderRadiusLG },} = theme.useToken();
         
     const handleLogout = () => {
@@ -68,18 +68,10 @@ const Homepage = () => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            if ( facultyName !== 'None') {
-                const response = await axios.get(`https://localhost:7021/api/Contributions/GetContributionsByFaculty?facultyName=${facultyName}`);
-                // Lọc những item có "approval" === true
-                const approvedContributions = response.data.filter(contribution => contribution.approval === true);
-                setContributions(approvedContributions);
-              }else{
-
-                  const response = await axios.get(`https://localhost:7021/api/Contributions`);
-                    // Lọc những item có "approval" === true
-                    const approvedContributions = response.data.filter(contribution => contribution.approval === true);
-                    setContributions(approvedContributions);
-              }
+            const response = await axios.get(`https://localhost:7021/api/Contributions`);
+            // Lọc những item có "approval" === true
+            const approvedContributions = response.data.filter(contribution => contribution.approval === true);
+            setContributions(approvedContributions);
 
           } catch (error) {
             console.error('Error fetching contributions:', error);
@@ -87,7 +79,7 @@ const Homepage = () => {
         };
     
         fetchData();
-    },[facultyName] );
+    },[] );
     
       
       
