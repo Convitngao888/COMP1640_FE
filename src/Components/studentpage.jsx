@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, message, Upload, Select   } from 'antd';
+import { Input, Button, message, Upload, Select, Checkbox } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useAuth } from './AuthContext';
 import { Navigate } from 'react-router-dom';
@@ -17,6 +17,7 @@ const Studentpage = () => {
   const [loading, setLoading] = useState(false);
   const [academicYearsOptions, setAcademicYearsOptions] = useState([]);
   const [selectedAcademicYear, setSelectedAcademicYear] = useState('');
+  const [agree, setAgree] = useState(false);
 
   useEffect(() => {
     const fetchAcademicYears = async () => {
@@ -54,8 +55,11 @@ const Studentpage = () => {
     setSelectedAcademicYear(value);
   };
 
+  const handleAgreeChange = (e) => { 
+    setAgree(e.target.checked);
+  };
+
   const handleSubmit = async () => {
-    setLoading(true);
     try {
       const formData = new FormData();
       fileList.forEach((file) => {
@@ -159,8 +163,12 @@ const Studentpage = () => {
               >
                 <Button style={{ marginTop: '20px'}} icon={<UploadOutlined />}>Upload Images</Button>
               </Upload>
+              <br/>
+              <Checkbox checked={agree} onChange={handleAgreeChange} style={{ marginBottom: '15px' }}>
+                I agree to the terms and policy
+              </Checkbox>
               <div style={{ textAlign: 'right' }}>
-                <Button type="primary" onClick={handleSubmit} loading={loading}>
+                <Button type="primary" onClick={handleSubmit} loading={loading} disabled={!agree}>
                   Submit
                 </Button>
               </div>
