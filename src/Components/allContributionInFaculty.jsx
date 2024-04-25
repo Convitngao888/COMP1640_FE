@@ -10,13 +10,13 @@ const { Meta } = Card;
 
 const AllContributionInFaculty = () => {
 
-  const { isAuthorized } = useAuth();
+  const { facultyName, isAuthorized } = useAuth();
   const [contributions, setContributions] = useState([]);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://localhost:7021/api/Contributions/Accepted`);
+        const response = await axios.get(`https://localhost:7021/api/Contributions/accepted/faculty/${facultyName}`);
         const myContributions = response.data;
         setContributions(myContributions);
       } catch (error) {
@@ -25,8 +25,8 @@ const AllContributionInFaculty = () => {
     };
 
     fetchData();
-  }, []);
-  
+  }, [facultyName]);
+
   return (
     <>
       {isAuthorized(1) ? (
@@ -49,7 +49,7 @@ const AllContributionInFaculty = () => {
                   description={`Faculty: ${contribution.facultyName}`}
                 />
                 <Popover overlayStyle={{ maxWidth: '440px' }} placement="bottom" title={'Description'} content={contribution.description}>
-                  <Button style ={{padding: 0 }} type="link">View Description</Button>
+                  <Button style={{ padding: 0 }} type="link">View Description</Button>
                 </Popover>
               </Card>
             ))}
@@ -60,7 +60,7 @@ const AllContributionInFaculty = () => {
           <Navigate to="/unAuthorized" />
         </div>
       )}
-      
+
     </>
   );
 }

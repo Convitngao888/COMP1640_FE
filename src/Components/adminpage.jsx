@@ -77,9 +77,9 @@ const Adminpage = () => {
         endDays: dayjs(editRecord.endDays).utc(editRecord.endDays).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
         finalEndDays: dayjs(editRecord.finalEndDays).utc(editRecord.finalEndDays).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
       });
-  
+
       message.success('Edit Academic Year Successfully');
-  
+
       // Update editRecord with response data
       const updatedRecord = {
         ...editRecord,
@@ -87,7 +87,7 @@ const Adminpage = () => {
         endDays: response.data.endDate,
         finalEndDays: response.data.finalEndDate,
       };
-      
+
       const updatedData = data.map(item =>
         item.academicYearsId === editRecord.academicYearsId ? updatedRecord : item
       );
@@ -172,11 +172,11 @@ const Adminpage = () => {
 
   const handleInputChange = (key, value) => {
     const localTime = value ? dayjs(value).utc(value) : null;
-     setEditRecord({
-       ...editRecord,
-       [key]: localTime,
-     });
-   };
+    setEditRecord({
+      ...editRecord,
+      [key]: localTime,
+    });
+  };
 
   return (
     <div>
@@ -208,21 +208,21 @@ const Adminpage = () => {
           >
             <Form>
               <Form.Item label="Start Day">
-                 <DatePicker
-                    value={editRecord && editRecord.startDays ? dayjs(editRecord.startDays).utc(editRecord.startDays) : null}
-                    onChange={(date) => handleInputChange('startDays', date)}
+                <DatePicker
+                  value={editRecord && editRecord.startDays ? dayjs(editRecord.startDays).utc(editRecord.startDays) : null}
+                  onChange={(date) => handleInputChange('startDays', date)}
                 />
               </Form.Item>
               <Form.Item label="End Day">
                 <DatePicker
-                    value={editRecord && editRecord.endDays ? dayjs(editRecord.endDays).utc(editRecord.endDays) : null}
-                    onChange={(date) => handleInputChange('endDays', date)}
+                  value={editRecord && editRecord.endDays ? dayjs(editRecord.endDays).utc(editRecord.endDays) : null}
+                  onChange={(date) => handleInputChange('endDays', date)}
                 />
               </Form.Item>
               <Form.Item label="Final End Day">
                 <DatePicker
-                    value={editRecord && editRecord.finalEndDays ? dayjs(editRecord.finalEndDays).utc(editRecord.finalEndDays)  : null}
-                    onChange={(date) => handleInputChange('finalEndDays', date)}
+                  value={editRecord && editRecord.finalEndDays ? dayjs(editRecord.finalEndDays).utc(editRecord.finalEndDays) : null}
+                  onChange={(date) => handleInputChange('finalEndDays', date)}
                 />
               </Form.Item>
             </Form>

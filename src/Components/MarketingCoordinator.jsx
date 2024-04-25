@@ -10,7 +10,7 @@ const MCpage = () => {
   const { userId } = useAuth();
   const [newComment, setNewComment] = useState('');
   const [comments, setComments] = useState([]);
-  const { isAuthorized, facultyName} = useAuth();
+  const { isAuthorized, facultyName } = useAuth();
   const [filterStatus, setFilterStatus] = useState('Show All');
   const [searchTitle, setSearchTitle] = useState('');
 
@@ -172,7 +172,7 @@ const MCpage = () => {
     <div>
       {isAuthorized(3) ? (
         <>
-           <Select value={filterStatus} onChange={(value) => setFilterStatus(value)} style={{ width: 120, marginBottom: '10px' }}>
+          <Select value={filterStatus} onChange={(value) => setFilterStatus(value)} style={{ width: 120, marginBottom: '10px' }}>
             <Option value="Show All">Show All</Option>
             <Option value="Pending">Pending</Option>
             <Option value="Accepted">Accepted</Option>
@@ -210,7 +210,7 @@ const MCpage = () => {
                       </tr>
                       <tr className='tr'>
                         <th className='th'>Documents</th>
-                        <td className='td'><Button style={{padding: 0}} size="large" type="link" onClick={() => handleDownload(contribution.contributionId)}>Download</Button></td>
+                        <td className='td'><Button style={{ padding: 0 }} size="large" type="link" onClick={() => handleDownload(contribution.contributionId)}>Download</Button></td>
                       </tr>
                       <tr className='tr'>
                         <th className='th'>Approval</th>
@@ -221,7 +221,7 @@ const MCpage = () => {
                             </>
                           ) : (
                             <>
-                              <Button type="primary" danger style={{background:'#66FF00', marginRight:'8px'}}  onClick={() => handleApprove(contribution.contributionId)}>Accept</Button>
+                              <Button type="primary" danger style={{ background: '#66FF00', marginRight: '8px' }} onClick={() => handleApprove(contribution.contributionId)}>Accept</Button>
                               <Button type="primary" danger onClick={() => handleReject(contribution.contributionId)}>Reject</Button>
                             </>
                           )}
@@ -231,12 +231,12 @@ const MCpage = () => {
                         <th className='th'>Comments</th>
                         <td className='td' style={{ maxHeight: '320px', overflowY: 'scroll', display: 'block' }}>
                           <div key={contribution.contributionId} className="comments-container">
-                          {comments[contribution.contributionId]?.map((comment, index) => (
+                            {comments[contribution.contributionId]?.map((comment, index) => (
                               <div key={index} className="comment">
-                                <Avatar style={{marginRight: 8}}src={comment.avatarLink} />
-                                <span style={{marginRight: 8}}className="username">{comment.userName}</span>
+                                <Avatar style={{ marginRight: 8 }} src={comment.avatarLink} />
+                                <span style={{ marginRight: 8 }} className="username">{comment.userName}</span>
                                 <span className="comment-time">{comment.commentTimeText}:</span>
-                                <div style={{marginLeft: 39}} className="content">{comment.content}</div>
+                                <div style={{ marginLeft: 39 }} className="content">{comment.content}</div>
                               </div>
                             ))}
                           </div>

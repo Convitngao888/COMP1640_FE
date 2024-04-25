@@ -1,15 +1,14 @@
-.register-container{
+.register-container {
     font-family: "Poppins", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: url(./Assets/landscape-sunset-minimal-4k-2y-1280x800.jpg)
-  no-repeat;
-  background-size: cover;
-  background-position: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url(https://cdn.discordapp.com/attachments/781128129136820247/1232826379389632553/deep-blue-sky-anime-landscape-tzr1026529pj5mbx.jpg?ex=662ade89&is=66298d09&hm=9dce777bf6a4280ee9f0a4fce521f7dedf022bbc18bb052ea6cb3653e7a639c9&) no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 .wrapper {
@@ -81,7 +80,7 @@
     text-decoration: underline;
 }
 
-.errorMessage{
+.errorMessage {
     padding: 4px;
     margin-left: 8px;
 }
@@ -95,33 +94,33 @@
     transform: translateX(-50%);
     z-index: 9999;
 }
-  
+
 .error-message,
 .success-message {
     padding: 10px 20px;
-    border-radius:10px;
-  }
-  
+    border-radius: 10px;
+}
+
 .error-message {
     background-color: #f44336;
     color: white;
     z-index: 99999;
-    
+
 }
 
 .error-message .icon {
     display: grid;
     place-items: center;
-    
+
 }
-  
+
 .success-message {
     background-color: #4caf50;
     color: white;
     display: flex;
     align-items: center;
-  }
-  
+}
+
 .messages-enter {
     opacity: 0;
     transform: translateY(-20px);
@@ -150,16 +149,17 @@
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    margin-right: 12px; /* Khoảng cách giữa spinner và success message */
+    margin-right: 12px;
+    /* Khoảng cách giữa spinner và success message */
     animation: spin 1s linear infinite;
     margin-bottom: 2.47px;
 }
 
 .select-wrapper {
     position: relative;
-  }
-  
-  .select {
+}
+
+.select {
     appearance: none;
     width: 100%;
     height: 100%;
@@ -170,21 +170,19 @@
     background: transparent;
     color: #fff;
     position: relative;
-    
-  }
-  
-  .select option {
-    background: pink; /* Màu nền cho option */
-    padding: 10px;
-  }
-  
-  
-  
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  
 
+}
+
+.select option {
+    background: pink;
+    /* Màu nền cho option */
+    padding: 10px;
+}
+
+
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

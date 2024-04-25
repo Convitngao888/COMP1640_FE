@@ -1,28 +1,29 @@
-.login-container{
+.login-container {
     font-family: "Poppins", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: url(./Assets/landscape-sunset-minimal-4k-2y-1280x800.jpg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url(https://cdn.discordapp.com/attachments/781128129136820247/1232826379389632553/deep-blue-sky-anime-landscape-tzr1026529pj5mbx.jpg?ex=662ade89&is=66298d09&hm=9dce777bf6a4280ee9f0a4fce521f7dedf022bbc18bb052ea6cb3653e7a639c9&);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 .wrapper {
     width: 420px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
-    backdrop-filter: blur(30px);
+    backdrop-filter: blur(100px);
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     color: #fff;
     border-radius: 10px;
     padding: 30px 40px;
     height: 100%;
 }
+
 .wrapper h1 {
     font-size: 36px;
     text-align: center;
@@ -32,10 +33,11 @@
 .wrapper .input-box {
     position: relative;
     width: 100%;
-    height: 50px; 
+    height: 50px;
     margin: 30px 0;
 
 }
+
 .input-box input {
     width: 100%;
     height: 100%;
@@ -48,7 +50,7 @@
     padding: 20px 45px 20px 20px;
 }
 
-.input-box input::placeholder  {
+.input-box input::placeholder {
     color: #fff;
 
 }
@@ -70,7 +72,7 @@
 
 .remember-forgot label input {
     accent-color: #fff;
-    margin-right: 4px; 
+    margin-right: 4px;
 }
 
 .remember-forgot div {
@@ -120,19 +122,19 @@
     display: flex;
     align-items: center;
     color: white;
-    
+
     border-radius: 10px;
-    position: relative; /* Để có thể sử dụng position absolute cho icon */
+    position: relative;
+    /* Để có thể sử dụng position absolute cho icon */
 }
 
-.error-text{
+.error-text {
     padding: 15px;
 }
 
-.login-error-message .login-icon{
+.login-error-message .login-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 10px;
 }
-

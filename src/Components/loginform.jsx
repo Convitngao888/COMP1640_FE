@@ -12,9 +12,10 @@ const LoginForm = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const { login } = useAuth();
 
-    const handleRegisterClick = () => {
+    /*const handleRegisterClick = () => {
         navigate('/register');
     };
+    */
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -57,7 +58,7 @@ const LoginForm = () => {
 
             const responseData = await response.json();
             login(responseData.accessToken, responseData.roleId, responseData.userId, responseData.userName, responseData.facultyName);
-            
+
             // Redirect to desired page after successful login
             setTimeout(() => {
                 navigate('/homepage');
@@ -93,20 +94,13 @@ const LoginForm = () => {
                         )}
                     </div>
 
-                    <div className="remember-forgot">
-                        <label><input type="checkbox" />Remember me</label>
-                        <div >Forgot password?</div>
-                    </div>
-                    <button type="submit">Login</button>
 
-                    <div className="register-link">
-                        <div>Don't have an account? <div onClick={handleRegisterClick}>Register</div></div>
-                    </div>
+                    <button type="submit">Login</button>
                 </form>
             </div>
 
             <TransitionGroup className="messages">
-            {errorMessage && (
+                {errorMessage && (
                     <CSSTransition
                         classNames="messages"
                         key="error"
